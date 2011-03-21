@@ -14,146 +14,141 @@
 <% if using_quiet_prototype? -%>
     <%= javascript_include_tag( 'canvass/redcloth_preview.js' ) %>
 <% end -%>
-    <link href="/hub/stylesheets/shared.css" media="all" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/css/risc_os_open_2011.css" media="all" />
     <%= stylesheet_link_tag( 'default_general', :media => :all   ) %>
     <%= stylesheet_link_tag( 'default_print',   :media => :print ) %>
   </head>
   <body>
-    <div id="header_and_content">
 <%= render 'shared/fixed_header' %>
-<%= ""#render :partial => 'layouts/header'
-%>
 
-    <!-- Canvass content table -->
+    <div id="template_main">
 
-    <div id="template_body_background"><div id="template_body_shadow_left" class="template_shadow_left"><div id="template_body_shadow_right" class="template_shadow_right"><div id="template_body_content" class="template_body_content template_overall_content">
+      <!-- Main body content -->
 
-    <br />
-    <table width="100%" cellspacing="0" cellpadding="0" align="center">
-      <tr valign="top" align="left">
-        <td width="75%">
-<div class="flash"><%= hubssolib_flash_tags -%></div>
+      <div id="template_body">
+        <div id="template_body_content">
+          <%= hubssolib_flash_tags -%>
+
           <div class="content">
 <% unless controller.skip_main_heading? -%>
             <h1><%= apphelp_heading() %></h1>
 <% end -%>
 <%= yield  %>
           </div>
+        </div>
+      </div>
 
-        <td>&nbsp;&nbsp;</td>
-        <td bgcolor="#bbbbbb" class="template_column_divider"><%= image_tag(image_path("shared/blank.gif"), :size => "1x1", :border => 0, :alt => '.') %></td>
-        <td>&nbsp;&nbsp;</td>
+      <!-- Sidebar -->
 
-        <td width="25%">
-          <div id="sidebar">
-            <div class="template_sidebar_node">
-              <h3><%= apphelp_generic( :actions ) %></h3>
+      <div id="template_sidebar">
+        <div id="template_sidebar_content">
+          <div class="template_sidebar_node">
+            <h3>Search whole site</h3>
 
-              <ul>
-                <%=
-                    buttons = []
+            <p />
+            <form action="http://www.google.com/search" method="get" class="searchform">
+              <input type="hidden" name="num"           value="10" />
+              <input type="hidden" name="hl"            value="en" />
+              <input type="hidden" name="as_sitesearch" value="www.riscosopen.org" />
+              <input type="text" value="" maxlength="256" size="15" name="q" id="q" />
+              <b><input type="submit" value="Go" name="btnG" /></b>
+            </form>
+          </div>
 
-                    if ( logged_in? && current_user.admin? )
-                      buttons << [
-                        :index,
-                        {
-                          :controller => PollsController,
-                          :method     => :user_polls_path,
-                          :text       => apphelp_view_hint( :your_polls, PollsController )
-                        },
-                        {
-                          :user_id    => current_user.id
-                        }
-                      ]
-                    end
+          <p />
+<%= render 'shared/fixed_sidebar' %>
 
+          <p />
+          <div class="template_sidebar_node">
+            <h3><%= apphelp_generic( :actions ) %></h3>
+
+            <ul>
+              <%=
+                  buttons = []
+
+                  if ( logged_in? && current_user.admin? )
                     buttons << [
                       :index,
                       {
                         :controller => PollsController,
-                        :method     => :polls_path
+                        :method     => :user_polls_path,
+                        :text       => apphelp_view_hint( :your_polls, PollsController )
+                      },
+                      {
+                        :user_id    => current_user.id
+                      }
+                    ]
+                  end
+
+                  buttons << [
+                    :index,
+                    {
+                      :controller => PollsController,
+                      :method     => :polls_path
+                    }
+                  ]
+
+                  if ( logged_in? )
+                    buttons << [
+                      :index,
+                      {
+                        :controller => DonationsController,
+                        :method     => :user_donations_path,
+                        :text       => apphelp_view_hint( :your_donations, DonationsController )
+                      },
+                      {
+                        :user_id    => current_user.nil? ? 0 : current_user.id
                       }
                     ]
 
-                    if ( logged_in? )
+                    if ( current_user.admin? )
                       buttons << [
                         :index,
                         {
                           :controller => DonationsController,
-                          :method     => :user_donations_path,
-                          :text       => apphelp_view_hint( :your_donations, DonationsController )
-                        },
-                        {
-                          :user_id    => current_user.nil? ? 0 : current_user.id
+                          :method     => :donations_path
                         }
                       ]
-
-                      if ( current_user.admin? )
-                        buttons << [
-                          :index,
-                          {
-                            :controller => DonationsController,
-                            :method     => :donations_path
-                          }
-                        ]
-                      end
                     end
+                  end
 
-                    buttons += [
-                      [
-                        :index,
-                        {
-                          :controller => AuditersController,
-                          :method     => :auditers_path
-                        }
-                      ],
-                      [
-                        :index,
-                        {
-                          :controller => UsersController,
-                          :method     => :users_path
-                        }
-                      ],
-                      [
-                        :index,
-                        {
-                          :controller => CurrenciesController,
-                          :method     => :currencies_path
-                        }
-                      ]
+                  buttons += [
+                    [
+                      :index,
+                      {
+                        :controller => AuditersController,
+                        :method     => :auditers_path
+                      }
+                    ],
+                    [
+                      :index,
+                      {
+                        :controller => UsersController,
+                        :method     => :users_path
+                      }
+                    ],
+                    [
+                      :index,
+                      {
+                        :controller => CurrenciesController,
+                        :method     => :currencies_path
+                      }
                     ]
+                  ]
 
-                    apphelp_protected_links_to(
-                      { :prefix => '<li>', :suffix => '</li>' },
-                      *buttons
-                    )
-                %>
-              </ul>
-            </div>
-
-            <p />
-<%= render 'shared/fixed_sidebar' %>
-
-            <p />
-            <div class="template_sidebar_node">
-              <h3>Site security</h3>
-
-              <p />
-              SSL logo here, if you want it.
-            </div>
+                  apphelp_protected_links_to(
+                    { :prefix => '<li>', :suffix => '</li>' },
+                    *buttons
+                  )
+              %>
+            </ul>
           </div>
-        </td>
-      </tr>
-    </table>
-    <br />
+        </div>
+      </div>
 
-    </div></div></div></div>
-
-    <div id="above_footer"></div>
+      <div id="template_main_block_end"></div>
     </div>
 
 <%= render 'shared/fixed_footer' %>
-<%= #render :partial => 'layouts/footer'
-%>
   </body>
 </html>

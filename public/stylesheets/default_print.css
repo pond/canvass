@@ -27,7 +27,7 @@ div#lightwindow_overlay,
  */
 
 div#header_and_content {
-  min-height: auto;
+  min-height: 0;
   padding-top: 0;
 }
 

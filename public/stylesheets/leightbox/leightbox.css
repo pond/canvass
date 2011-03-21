@@ -36,7 +36,6 @@
   background-color:#333;
   -moz-opacity: 0.8;
   opacity:.80;
-  filter: alpha(opacity=80);
 }
 
 .lightbox[id]{ /* IE6 and below Can't See This */    position:fixed;    }#overlay[id]{ /* IE6 and below Can't See This */    position:fixed;    }
