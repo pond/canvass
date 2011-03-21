@@ -6,7 +6,12 @@ config.cache_classes = true
 
 # Full error reports are disabled and caching is turned on
 config.action_controller.consider_all_requests_local = false
-config.action_controller.perform_caching             = true
+# 2011-03-16 (ADH): Obscure error arises resulting from ApplicationController
+# using cache sweepers AFAICT. There seems to be no proper fix. See e.g.:
+# https://github.com/collectiveidea/acts_as_audited/issues/#issue/20
+# http://groups.google.com/group/communityengine/browse_thread/thread/b84154e5228bf9f3
+#config.action_controller.perform_caching             = true
+config.action_controller.perform_caching             = false
 config.action_view.cache_template_loading            = true
 
 # See everything in the log (default is :info)
@@ -25,7 +30,7 @@ config.action_view.cache_template_loading            = true
 # config.action_mailer.raise_delivery_errors = false
 
 config.action_mailer.raise_delivery_errors = true
-config.action_mailer.delivery_method = :sendmail
+# config.action_mailer.delivery_method = :sendmail
 
 # Enable threaded mode
 # config.threadsafe!
