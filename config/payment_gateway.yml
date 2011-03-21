@@ -1,0 +1,133 @@
+# Payment gateway configuration
+# =============================
+#
+# Choose a payment gateway expressed as an Active Merchant class name, such as
+# "PayflowGateway" or "BeanstreamGateway". Then configure a login ID, password
+# and signature. The contents depend on your gateway and not all of the values
+# may be needed. Extended notes for PayPal are given later as PayPal's range of
+# products, the associated Active Merchant gateways and the names of all of
+# these things can be particularly complicated and confusing.
+#
+# If a value isn't required, just leave the key name (e.g. "signature:") intact
+# with the colon after it included, but have nothing else on that line.
+#
+#
+# Configuration summary
+# ---------------------
+#
+#   Key            Value
+#   ===========================================================================
+#   gateway        Name of class of required Active Merchant gateway, such as
+#                  "BeanstreamGateway". See the Active Merchant documentation
+#                  for more information.
+#
+#   login          Login string to use for gateway (nearly always needed).
+#
+#   password       Password string to use for gateway (nearly always needed).
+#
+#   signature      Signature string to use for gateway (often not used, so just
+#                  give no value at all on the "signature:" line).
+#
+#
+# PayPal and choosing the correct gateway
+# ---------------------------------------
+#
+# PayPal in the UK have an XML-based API which is provided to accounts
+# that have "Website Payments Pro" enabled. This API has the name
+# "Payflow". In the USA the equivalent product is called "Payflow Pro".
+# Confusingly, American PayPal accounts can also choose something
+# called "Website Payments Pro" but that's nothing to do with the
+# same-named UK product! It is based on a different kind of API and can
+# be ignored as far as ActiveMerchant is concerned in this discussion -
+# there does seem to be an Active Merchant gateway for this specific API
+# too ("PaypalGateway"), but I've never used it, it might not actually
+# be for what I'm assuming as a result and I don't discuss it further
+# below.
+#
+# When using Payments Pro (UK) or Payflow Pro (USA), the Active Merchant
+# gateways with "Payflow" in their names must be used. There is a
+# generic ("PayflowGateway") and a UK specific ("PayflowUkGateway")
+# gateway; the correct one must be used as API parameters vary
+# according to the location of the account you are targetting. There are
+# also "Express" variants of each of these gateways, which manage the
+# 'express checkout' option that is supported in addition to the
+# on-site credit card payment system. These are usually not
+# instantiated directly, but accessed via the main instantiated gateway
+# object via "gateway.express.<ActiveMerchant call>". In theory Artisan
+# does support use of just the 'express' version of the gateway for
+# express-only checkout, but then you'll be ignoring most of the useful
+# Payflow Pro features and paying a monthly fee needlessly (see later).
+#
+# When instantiating one of the "Payflow" gateways, only a login ID and
+# password are required. These are the credentials you enter when you
+# visit "manager.paypal.com". That won't mean anything to you unless
+# you've set up an account with Website Payments Pro approved and
+# enabled for that account.
+#
+# Payments Pro / Payflow Pro is time consuming to set up, needs PayPal
+# to allow the application, and can involve lots of forms and even a
+# telephone interview. If for some reason your application is refused,
+# you probably won't be told why and you have to wait 90 days before you
+# can apply again. There's also a monthly fee to use the service. Quite
+# a lot of hassle just to allow someone to type in their card details on
+# your web pages, rather than on PayPal's web pages!
+#
+# Fortunately, a no-fee, no-application option for PayPal business
+# accounts exists: Express Checkout. This is not to be confused with the
+# Express Checkout portion of Pay[flow/ments] Pro interface discussed
+# above despite them having the same PayPal 'product name', since a
+# different Active Merchant gateway must be used.
+#
+# When using the Express Checkout API, the Active Merchant gateway
+# classes with "Paypal" in their name - note "Paypal" and *NOT*
+# "Payflow" - are used.
+#
+# To set up Express Checkout, you have to dig around in your PayPal
+# business account's "Profile" link and find the stuff about enabling
+# "Express Checkout" and configuring "API access". You must create
+# (again, follow your nose) API credentials, using a signature rather
+# than a certificate when given the option. This results in a
+# complicated looking login name, a long password and even longer
+# signature string. These three values are supplied for the :login,
+# :password and :signature keys when you instantiate your "Paypal"
+# class gateway. In practice, whether in the UK or US, you'd always use
+# the "PaypalExpressGateway" here.
+#
+# Unlike the "Payflow" gateways, Active Merchant has no UK specific
+# variant as none is strictly needed by the API. It's nice to create one
+# though, both for consistency with the set of "Payflow" classes and to
+# set up a default currency of British Pounds as otherwise, the default
+# is US Dollars. That's what "config/initializers/10_paypal_express_uk"
+# does; if you have a UK account, specify the "PaypalExpressUkGateway"
+# rather than "PaypalExpressGateway".
+#
+# Express Checkout supports only a single currency per cart, so when
+# Artisan detects that this gateway or its superclass is in use, on-site
+# checkout systems will be hidden and users will not be allowed to add
+# multiple currency items to their cart. They can try, but they'll be
+# given a warning that the cart already contains items in another
+# currency and told that they must check out using those first.
+
+---
+production:
+
+  gateway:       "PaypalExpressUkGateway" # See "config/initializers/10_paypal_express_uk.rb"
+  login:         "set-login-here"
+  password:      "set-password-here"
+  signature:     "set-signature-here"
+
+development:
+
+  gateway:       "PayflowGateway"
+  login:         "set-login-here"
+  password:      "set-signature-here"
+  signature:
+
+# You shouldn't need to change the settings for the 'test' environment.
+
+test:
+
+  gateway:       "BogusGateway"
+  login:         "donotcare"
+  password:      "donotcare"
+  signature:     "donotcare"

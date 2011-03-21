@@ -1,0 +1,46 @@
+<%
+  # Make sure that "@items" contains the pagination-enabled list of items to
+  # show and render with "render :partial => 'list'".
+-%>
+<div class="searchable_list" id="users">
+<% if @items.empty? -%>
+  <%= apphelp_view_hint( :no_index_items ) %>
+  <br /><br />
+<% else -%>
+  <table border="1" cellspacing="1" cellpadding="0">
+    <thead>
+      <tr>
+        <%
+          sort_headers_for :user, %w{name email admin} do | header |
+            User.human_attribute_name( header )
+          end
+        %>
+        <th class="spinner corner"><div id="spinner" style="display: none"></div></th>
+      </tr>
+    </thead>
+
+    <tbody>
+<%   for user in @items %>
+      <tr class="<%= cycle( 'odd', 'even' ) %>">
+        <td><%= link_to( h( user.name ), user ) %></td>
+        <td><%= mail_to( user.email ) %></td>
+        <td><%= apphelp_boolean( user.admin ) %></td>
+      </tr>
+<%   end -%>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="3">
+          <div class="pagination">
+            <%= apphelp_i18n_will_paginate( @items ) %>
+          </div>
+          <div class="buttons">
+<%= render :partial => 'shared/leightbox_button' %>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+<% end -%>
+</div>

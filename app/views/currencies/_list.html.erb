@@ -1,0 +1,49 @@
+<%
+  # Make sure that "@items" contains the pagination-enabled list of items to
+  # show and render with "render :partial => 'list'".
+-%>
+<div class="searchable_list" id="currencies">
+<% if @items.empty? -%>
+  <%= apphelp_view_hint( :no_index_items ) %>
+  <br /><br />
+<% else -%>
+  <table border="1" cellspacing="1" cellpadding="0">
+    <thead>
+      <tr>
+        <%
+          sort_headers_for :currency, %w{name code symbol rounding_algorithm} do | header |
+            Currency.human_attribute_name( header )
+          end
+        %>
+        <th class="spinner corner"><div id="spinner" style="display: none"></div></th>
+      </tr>
+    </thead>
+
+    <tbody>
+<%   for currency in @items %>
+      <tr class="<%= cycle( 'odd', 'even' ) %>">
+        <td><%=h currency.name %></td>
+        <td><%=h currency.code %></td>
+        <td>"<%=h currency.symbol %>"</td>
+        <td><%=h currency.rounding_algorithm.humanize %></td>
+        <td><%= apphelp_index_actions( 'currency', currency ) %></td>
+      </tr>
+<%   end -%>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="5">
+          <div class="pagination">
+            <%= apphelp_i18n_will_paginate( @items ) %>
+          </div>
+          <div class="buttons">
+            <%= apphelp_protected_button_to( :new, { :method => :new_currency_path } ) %>
+<%= render :partial => 'shared/leightbox_button' %>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+<% end -%>
+</div>

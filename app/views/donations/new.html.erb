@@ -1,0 +1,51 @@
+<% form_for( [ :poll, @donation ] ) do | f | %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= apphelp_view_hint( :preamble_hint, DonationsController, :poll_title => @poll.title ) %>
+  </p>
+
+  <p>
+    <strong><%= apphelp_view_hint( :payment_amount_hint ) %></strong>
+  </p>
+
+  <p>
+    <%= currencyhelp_edit( @poll.currency, f, :amount ) %>
+  </p>
+
+  <p>
+    <strong><%= apphelp_view_hint( :payment_method_hint ) %></strong>
+  </p>
+
+  <p>
+    <%= apphelp_view_hint( :payment_not_stored ) %>
+  </p>
+
+  <p>
+<%   unless ( PaymentGateway.instance.gateway_is_express_only() ) -%>
+    <%= radio_button_tag( :payment_method, :onsite, params[ :payment_method ] != 'offsite' ) -%>
+    <%= label_tag( :payment_method_onsite, apphelp_view_hint( :payment_onsite_hint ) ) %>
+<%   end -%>
+<%   if ( PaymentGateway.instance.gateway_is_express_only() || PaymentGateway.instance.gateway_has_express_support() ) -%>
+<%     unless ( PaymentGateway.instance.gateway_is_express_only() ) -%>
+    <br />
+<%     end -%>
+    <%= radio_button_tag( :payment_method, :offsite, params[ :payment_method ] == 'offsite' || PaymentGateway.instance.gateway_is_express_only() ) -%>
+    <%=
+        acceptance_mark = image_tag(
+          "https://www.paypal.com/en_GB/GB/i/logo/PayPal_mark_37x23.gif",
+          :size => '37x23',
+          :alt  => "PayPal",
+          :align => :middle,
+          :style => "margin-bottom: 15px;"
+        )
+
+        label_tag( :payment_method_offsite, apphelp_view_hint( :payment_offsite_hint ) + "&nbsp;" + acceptance_mark )
+    %>
+<%   end -%>
+  </p>
+
+  <div class="buttons aligned">
+    <%= apphelp_submit( f, "Make donation" ) %>
+  </div>
+<% end %>

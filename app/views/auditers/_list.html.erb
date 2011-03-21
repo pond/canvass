@@ -1,0 +1,48 @@
+<%
+  # Make sure that "@items" contains the pagination-enabled list of items to
+  # show and render with "render :partial => 'list'".
+-%>
+<div class="searchable_list" id="auditers">
+<% if @items.empty? -%>
+  <%= apphelp_view_hint( :no_index_items ) %>
+  <br /><br />
+<% else -%>
+  <table border="1" cellspacing="1" cellpadding="0" class="audit_list">
+    <thead>
+      <tr>
+        <%
+          sort_headers_for :auditer, %w{created_at username auditable_type action changes} do | header |
+            Auditer.human_attribute_name( header )
+          end
+        %>
+        <th class="spinner inline corner" width="32"><div id="spinner" style="display: none"></div></th>
+      </tr>
+    </thead>
+
+    <tbody>
+<%   for auditer in @items %>
+      <tr class="<%= cycle( 'odd', 'even' ) %>">
+        <td><%= auditer.created_at %></td>
+        <td><%= auditershelp_user_link( auditer ) %></td>
+        <td><%= h( auditer.auditable_type ) %></td>
+        <td><%= h( auditer.action.capitalize ) %></td>
+        <td colspan="2"><%= auditershelp_changes( auditer ) %></td>
+      </tr>
+<%   end -%>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="6">
+          <div class="pagination">
+            <%= apphelp_i18n_will_paginate( @items ) %>
+          </div>
+          <div class="buttons">
+<%= render :partial => 'shared/leightbox_button' %>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+<% end -%>
+</div>

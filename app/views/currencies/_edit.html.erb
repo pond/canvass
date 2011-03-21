@@ -1,0 +1,68 @@
+<%
+  # Render as follows:
+  #
+  #   render(
+  #     :partial => 'edit',
+  #     :locals  => {
+  #       :currency => <currency>,
+  #       :action  => :create | :update
+  #     }
+  #   )
+  #
+  # ...where <currency> is the currency to edit, :action is used for the
+  # internationalised text in the 'submit' action button. In addition, a
+  # "delete" button is shown for the :update case.
+
+  form_for( currency ) do | f | %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name, :size => 30, :maxlength => Currency::MAXLEN_NAME %>
+  </p>
+  <p>
+    <%= f.label :code %>
+    (<a target="_blank" href="http://www.iso.org/iso/support/faqs/faqs_widely_used_standards/widely_used_standards_other/currency_codes/currency_codes_list-1.htm">ISO 4217</a>)
+    (<a target="_blank" href="http://en.wikipedia.org/wiki/ISO_4217">?</a>)
+    <%= f.text_field :code, :size => 5, :maxlength => Currency::MAXLEN_CODE %>
+  </p>
+  <p>
+    <%= f.label :symbol %> <%= apphelp_view_hint( :symbol_hint ) %><br />
+    <%= f.text_field :symbol, :size => 30, :maxlength => Currency::MAXLEN_SYMBOL %>
+  </p>
+  <p>
+    <%= f.label :show_after_number %>
+    <%= f.check_box :show_after_number %>
+  </p>
+  <p>
+    <%= f.label :decimal_precision %><br />
+    <%= currencyhelp_decimal_precision_menu( :form => f ) %>
+  </p>
+  <p>
+    <%= f.label :rounding_algorithm %><br />
+    <%= currencyhelp_rounding_algorithm_menu( :form => f ) %>
+  </p>
+  <p>
+    <%= f.label :formatting_template %><br />
+    <%= f.text_field :integer_template,  :size => Currency::MAXLEN_INTEGER_TEMPLATE,  :maxlength => Currency::MAXLEN_INTEGER_TEMPLATE  %>
+    <%= f.text_field :delimiter,         :size => 3,                                  :maxlength => Currency::MAXLEN_DELIMITER         %>
+    <%= f.text_field :fraction_template, :size => Currency::MAXLEN_FRACTION_TEMPLATE, :maxlength => Currency::MAXLEN_FRACTION_TEMPLATE %>
+  </p>
+
+  <p />
+  <div class="buttons aligned">
+    <%= apphelp_submit( f, action ) %>
+
+<%   if ( action == :create ) -%>
+    <%= apphelp_protected_button_to( :index, { :method => :currencies_path } ) %>
+<%   else -%>
+    <%=
+      apphelp_protected_buttons_to(
+        nil,
+        [ :show,  { :method => :currency_path   }, @currency ],
+        [ :index, { :method => :currencies_path }            ]
+      )
+    %>
+<%   end -%>
+  </div>
+<% end %>

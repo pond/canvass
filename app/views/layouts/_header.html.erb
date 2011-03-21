@@ -1,0 +1,22 @@
+    <div id="header_wrapper"><div class="header">
+      <div id="user_bar_content"><div id="user_bar_content_inner">
+        <div id="user_bar_site_id">
+          <div id="user_bar_site_name">
+            <%= apphelp_site_name %>
+          </div>
+<% unless apphelp_site_tagline().blank? -%>
+          <div id="user_bar_site_tagline">
+            <%= apphelp_site_tagline() %>
+          </div>
+<% end -%>
+        </div>
+      </div></div>
+
+      <div id="navigation_bar_before"></div>
+      <div id="navigation_bar"><div id="navigation_bar_inner">
+        <a href="/hub/account/login_conditional"><img src="/hub/account/login
+_indication" alt="<%= apphelp_generic( :hub_account ) %>" border="0" height="18" width="72"></a>
+      </div></div>
+      <div class="header_section_end"></div>
+    </div></div>
+    

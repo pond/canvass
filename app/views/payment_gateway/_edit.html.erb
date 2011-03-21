@@ -1,0 +1,83 @@
+<%
+    # Render with:
+    #
+    #   render :partial => 'payment_gateway/edit',
+    #          :locals  => {
+    #            :activemerchant_address => <address>,
+    #            :notes                  => <notes>,
+    #            :donation               => <donation>
+    #          }
+    #
+    # ...where <address> is an ActiveMerchant format address hash with keys
+    # "address1" to "address3", "company", "city", "state", "country" and "zip"
+    # all optional along with "name" (buyer name in full) which is mandatory;
+    # and <notes> is a string of text notes that the buyer may have specified
+    # at some earlier payment stage (e.g. via an offsite gateway). Finally,
+    # <donation> must be set to the Donation object related to the payment.
+-%>
+<% form_tag( { :action => :update }, { :method => :put } ) do %>
+  <%= hidden_field_tag( :token, params[ :token ] ) %>
+  <%= hidden_field_tag( :payer_id, params[ :PayerID ] ) %>
+
+  <dl>
+    <dt><%= apphelp_view_hint( :confirm_preamble, PaymentGatewayController ) %></dt>
+    <dd>
+      <%=
+          apphelp_view_hint(
+            :confirm_details,
+            PaymentGatewayController,
+            {
+              :poll_title => donation.poll_title,
+              :amount     => currencyhelp_compose(
+                               donation.currency,
+                               donation.amount_integer,
+                               donation.amount_fraction
+                             )
+            }
+          )
+      %>
+    </dd>
+
+    <dt><%= apphelp_view_hint( :billing_address, PaymentGatewayController ) %></dt>
+    <dd>
+      <%=h activemerchant_address[ 'name' ] %><br /><br />
+<%
+     %w{ company address1 address2 address3 city state country zip }.each do | field |
+       text = activemerchant_address[ field ]
+       unless ( text.blank? )
+-%>
+      <%=h text %><br />
+<%
+       end
+     end
+-%>
+    </dd>
+<%   unless notes.blank? -%>
+
+    <dt><%= apphelp_view_hint( :additional_notes, PaymentGatewayController ) %></dt>
+    <dd>
+      <%= text_area_tag( :notes, notes, :cols => 40, :rows => 5 ) %>
+    </dd>
+<%   end -%>
+  </ul>
+
+  <p>
+    <%= apphelp_view_hint( :explain, PaymentGatewayController ) %>
+  </p>
+
+  <div class="buttons aligned">
+    <%= apphelp_submit( nil, apphelp_view_hint( :pay, PaymentGatewayController ), '    ' ) %>
+    <%=
+      apphelp_protected_button_to(
+        :delete,
+        {
+          :method     => "delete_poll_#{ controller.controller_name }_path",
+          :model      => PaymentGateway,
+          :icon       => :cancel,
+          :variant    => :negative
+        },
+        { :poll_id => params[ :poll_id ] } # NOT just 'params' or URL generation fails
+      )
+    -%>
+  </div>
+<% end %>

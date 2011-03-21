@@ -1,0 +1,20 @@
+<%
+   # If using shared/simple_search and Leightbox is in use for the action,
+   # then the search partial includes Leightbox hiding elements. Render this
+   # button partial inside a <div class="buttons">...</div> to get the pop-up
+   # button which reveals the hidden search panel. No parameters are needed.
+   #
+   # Note the special case in the search partial for empty search results,
+   # wherein the partial renders itself without a Leightbox wrapper and so, in
+   # turn, no Leightbox button is needed.
+-%>
+<a href="#search_container" rel="leightbox_simple_search" class="positive round lbOn">
+  <%= image_tag( 'icons/find.png', :alt => '' ) %>
+  <%= t( :'uk.org.pond.canvass.search.title' ) %>
+</a>
+<%=
+  # This is needed as search buttons maybe included in AJAX-updated page
+  # fragments, breaking the Leightbox link established "onload".
+
+  javascript_tag( "leightboxScanDocument();" )
+%>

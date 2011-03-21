@@ -1,0 +1,126 @@
+QuietLightwindow
+================
+
+Makes it easy to include Lightwindow only when you want it while still having
+an application-global layout. That is, rather than using something like the
+following in a "layouts/application.html.erb" file:
+
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag 'lightwindow/lightwindow' %>
+  <%= stylesheet_link_tag    'lightwindow/lightwindow' %>
+
+...you instead do something like this:
+
+  <%= include_lightwindow_if_used %>
+
+...and JS plus CSS links will only be output if a Controller handling the
+current action has said that it wants Lightwindow facilities for that action's
+view by making a call along the lines of:
+
+  uses_lightwindow()
+
+...around the same place it might declare "before_filter" items and the like.
+The "uses_lightwindow" method takes a hash of options which are passed straight
+through to the Rails "before_filter" API allowing the Controller to further
+refine its use of Lightwindow to certain views, for example, to use Lightwindow
+in an "edit" action (and in a related "update" action in case an update fails
+and re-renders the "edit" view):
+
+  uses_lightwindow( :only => [ :edit, :update ] )
+
+If you also use the "quiet_prototype" plugin, then note that you should not use
+both "uses_prototype" and "uses_lightwindow" for the same actions in the same
+controller. Since Lightwindow depends on Prototype, the default set of JS
+inclusions will be used for Lightwindow. Calling "uses_prototype" as well as
+"uses_lightwindow" will result in the same JS and CSS being included twice.
+
+Note that the plugin assumes your lightwindow.js file is in
+"public/javascripts/lightwindow/lightwindow.js" and, similarly, that the CSS
+file is in "public/stylesheets/lightwindow/lightwindow.css". You will probably
+need to edit the CSS file to refer to images in the right place; it's up to
+you where you put them ("public/images/lightwindow/*" is a logical choice,
+with CSS referring to "../../images/lightwindow/*" rather than "/images/..." to
+maintain position independence relative to the web server document root. You
+may also find hard-coded image references in the Lightwindow JS source code -
+since these will be taken as relative to the current page, you may be forced to
+adjust them to assume a particular document root location (e.g. "/images/..."),
+or perhaps replace the inline IMGs with something which gets an image from CSS.
+
+This plugin does not include Lightwindow components for installation. Download
+these and install them manually as per your specific requirements. At the time
+of writing, Lightwindow 2.0 is available at:
+
+  http://stickmanlabs.com/lightwindow/
+
+
+Internationalisation
+====================
+
+Rails 2.3 internationalisation is supported. Include tokens as follows in your
+locale YAML file(s) - e.g. for English:
+
+en:
+  pond:
+    quiet_lightwindow:
+      close:      "Close"
+      loading_or: "Loading or"
+      cancel:     "cancel"
+
+If I18n features are missing or there are no translation strings available, the
+default values shown above will be used instead. The following short script is
+written out using the locale-specific, or default value strings:
+
+  var lightwindow_i18n = {
+    close:      "Close",
+    loading_or: "Loading or",
+    cancel:     "cancel"
+  }
+
+You can then modify your version of lightwindow.js to read from this variable.
+For example, in version 2.0 at around line 166-168ish there is a line of code
+which takes part in constructing a string containing HTML data:
+
+  '<a id="lightwindow_title_bar_close_link" >Close</a>'+
+
+...modify to read:
+
+  '<a id="lightwindow_title_bar_close_link" >'+lightwindow_i18n.close+'</a>'+
+
+At around line 216-218ish:
+
+  '<span>Loading or <a href="javascript: myLightWindow.deactivate();">Cancel</a></span>'+
+  
+...modify to read:
+
+  '<span>'+lightwindow_i18n.loading_or+' <a href="javascript: myLightWindow.deactivate();">'+lightwindow_i18n.cancel+'</a></span>'+
+
+The default Lightwindow next/previous indicator GIF images actually have the
+words "NEXT" and "PREV" 'burned in' to them. The simplest solution is to change
+these to some picture-based form (e.g. replacing the "NEXT" text with an arrow
+pointing right and "PREV" with an arrow pointing left).
+
+
+Heritage
+========
+
+The plugin wrapper concept comes from larsklevan's "yui_editor" plugin:
+
+  http://github.com/larsklevan/yui_editor/tree/master
+
+The QuietLightwindow plugin would not exist without this component. My thanks
+go to the author for his hard work.
+
+
+Installation
+============
+
+script/plugin install [TBD]
+
+
+Feedback
+========
+
+Send feedback and questions to ahodgkin@rowing.org.uk
+
+Copyright (c) 2009 Hipposoft (Andrew Hodgkinson).
+Released under the MIT license.

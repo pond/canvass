@@ -1,0 +1,4 @@
+<h1><%= pollshelp_index_text( @user ) %></h1>
+<% if ( @search_results ) -%><h3><%=t( :'uk.org.pond.canvass.search.results' ) %></h3><% end %>
+<%= render :partial => 'list' %>
+<%= render :partial => 'shared/simple_search' %>

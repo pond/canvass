@@ -1,0 +1,15 @@
+<%=
+  CanvassMailer.formatted(
+    :new_donation_made_admin_body,
+    :user_name  => @data.user_name,
+    :user_email => @data.user_email,
+    :poll_title => @data.poll_title,
+    :amount     => currencyhelp_compose( @data.currency, @data.amount_integer, @data.amount_fraction )
+  )
+%>
+
+  <%= user_donation_url( :user_id => @data.user_id, :id => @data.id ) %>
+<% unless ( @data.notes.empty? ) %>
+<%= CanvassMailer.formatted( :new_donation_made_admin_notes ) %>
+"<%= CanvassMailer.formatted( @data.notes ) %>"
+<% end -%>

@@ -1,0 +1,353 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+
+  # Framework messages.
+
+  activerecord:
+    models:
+      user:     "User"
+      poll:     "Bounty"
+      donation: "Donation"
+      currency: "Currency"
+
+    attributes:
+
+      auditer:
+        auditable_type:              "Item"
+        action:                      "Event"
+        username:                    "Name"
+        changes:                     "Details"
+        created_at:                  "Date"
+
+      currency:
+        name:                        "Name as 'Native (English)'"
+        code:                        "Code"
+        symbol:                      "Symbol"
+        show_after_number:           "Show symbol after number?"
+        rounding_algorithm:          "Rounding algorithm"
+        decimal_precision:           "Decimal precision before rounding algorithm"
+        formatting_template:         "Formatting template" # For display/edit text purposes only - no actual column of this name in DB
+        examples:                    "Examples"            #  "
+
+      donation:
+        user_id:                     "Donor (linked)"
+        user_name:                   "Donor's name"
+        user_email:                  "Donor's e-mail address"
+        poll_id:                     "Bounty (linked)"
+        poll_title:                  "Bounty overview"
+        amount_for_sorting:          "Amount donated"
+        amount_integer:              "Donation amount (first value)"
+        amount_fraction:             "Donation amount (second value)"
+        updated_at:                  "Date"
+
+      payment_card:                  # Has no ActiveRecord database repesentation
+        card_name:                   "Card holder's full name"
+        card_type:                   "Card type"
+        card_number:                 "Card number"
+        card_cvv:                    "Card verification number"
+        card_to:                     "Expiry date"
+        card_from:                   "Start date (Switch/Solo)"
+        card_issue:                  "Issue number (Switch/Solo)"
+
+        address:                     "Billing address"
+        address_1:                   "Billing address 1"
+        address_2:                   "Billing address 2"
+        address_3:                   "Billing address 3"
+        city:                        "Billing city / town"
+        state:                       "Billing state / county"
+        country:                     "Billing country"
+        postcode:                    "Billing ZIP (postal) code"
+
+      poll:
+        title:                       "Overview"
+        description:                 "Description"
+        workflow_state:              "State"
+        votes:                       "Donations"
+        total_for_sorting:           "Total"
+        currency:                    "Supported donation currency"
+
+      user:
+        name:                        "Name"
+        email:                       "E-mail address"
+        admin:                       "Is an administrator?"
+        yours:                       "Is your account?" # For display/edit text purposes only - no actual column of this name in DB
+        created_at:                  "Date of first visit"
+
+    errors:
+      models:
+        donation:
+          cannot_donate_nothing:     "is zero"
+          poll_has_vanished:         "Sorry, your donation cannot be accepted. The bounty cannot be found anymore. It might have been deleted while you were working through the payment process."
+          poll_is_not_open:          "Sorry, your donation cannot be accepted. The bounty is no longer open for donations. It might have changed status while you were working through the payment process."
+
+        payment_card:
+          has_expired:               "has is in the past (card has expired)"
+          is_invalid:                "is invalid"
+
+        poll:
+          cannot_change_currency:    "cannot be altered once a bounty has attracted donations"
+          no_others_open:            "cannot be cannot be changed - there are no other open bounties using this currency"
+
+  # Canvass-specific messages.
+
+  uk:
+    org:
+      pond:
+        canvass:
+          site_name:                                   "Canvass"
+          site_tagline:                                "...your opinion"
+
+          action_names:
+            index:                                     "List"
+            new:                                       "New"
+            create:                                    "Create"
+            edit:                                      "Edit details"
+            update:                                    "Update details"
+            show:                                      "Show details"
+            delete:                                    "Delete"
+            destroy:                                   "Delete"
+
+          generic_messages:
+            "no":                                      "No"
+            "yes":                                     "Yes"
+            none:                                      "None"
+            unknown:                                   "Unknown"
+            free:                                      "Free"
+            ago:                                       "ago"
+            you:                                       "You"
+            range_from:                                "From" # See also the Messages controller view hint strings
+            range_to:                                  "to"
+            page_menu:                                 "Explore..."
+            actions:                                   "Actions"
+            confirmation:                              "Are you sure? This action cannot be undone!"
+            delete:                                    "The following things will be permanently removed:"
+            error_prefix:                              "Your request cannot be processed at this time. A serious unexpected error occurred: %{error}"
+            updated:                 &details_updated  "The details were successfully updated."
+            requirement_hint:                          "indicates that a form field must be filled in."
+            javascript_hint:                           "To make this feature of the web site faster and easier to use, we recommend that you enable JavaScript if your browser supports it, or change to a browser with JavaScript support if not. Then reload this page. However, if you are unable to do this for any reason, you can proceed to the non-JavaScript version of the feature using the link below."
+            javascript_link:                           "Proceed..."
+            html_use:                                  "You can use simple HTML mark-up to enhance your text (tags: %{tags}, attributes: %{attributes})"
+            sorting:                                   "Sort by:"
+            tags:                                      "Tags"
+            tagging:                                   "Comma-separated tags are optional but help people more quickly classify, sort and find groups of related things."
+            account_deleted:                           "Unknown (account deleted)"
+            hub_account:                               "Hub Account"
+
+          pagination:
+            previous:                                  "« Previous"
+            next:                                      "Next »"
+
+          search:
+            title:                                     "Search"
+            results:                                   "Search results"
+            start:                                     "Go"
+            cancel:                                    "Cancel"
+            and:                                       "and"
+            or:                                        "or"
+            menu_blank:                                "Anything"
+            close:                                     "Close"
+
+          canvass_mailer:
+            new_donation_made:                         "Donation confirmed"
+            new_donation_made_body:                    "Thank you for your %{site_name} donation to \"%{poll_title}\". To view a donation invoice for your records, please visit:"
+
+            new_donation_made_admin:                   "Donation received"
+            new_donation_made_admin_body:              "User \"%{user_name}\", \"%{user_email}\" donated %{amount} to \"%{poll_title}\". To view the donation invoice, please visit:"
+
+          controllers:
+
+            # Multiple entries; index action only.
+            #
+            auditers:
+              name:                                    "Audit trail"
+              action_title_index:                      "Audit trail"
+
+              view_no_other_details:                   "No other details available"
+              view_change_details_field:               "Field"
+              view_change_details_from:                "From"
+              view_change_details_to:                  "To"
+              view_change_details_was:                 "Was"
+              view_change_details_became:              "Set to"
+
+            # Multiple entries; full set of read/write actions.
+            #
+            currencies:
+              name:                                    "Currencies"
+              action_title_new:      &new_title        "Describe a new currency"
+              action_title_edit:     &edit_title       "Edit currency description"
+              action_title_show:                       "Currency details"
+              action_title_index:                      "Currency descriptions"
+              action_title_delete:   &delete_title     "Delete currency description"
+
+              action_notice_new:     &new_notice       "The currency description was successfully created."
+              action_notice_delete:  &delete_notice    "The currency description was successfully deleted."
+
+              action_error_delete:   &delete_error     "This currency cannot be deleted as it is either associated with bounties, with donations, or it is the only remaining currency."
+
+              action_title_create:   *new_title
+              action_title_update:   *edit_title
+              action_title_destroy:  *delete_title
+
+              action_notice_create:  *new_notice
+              action_notice_edit:    *details_updated
+              action_notice_update:  *details_updated
+              action_notice_destroy: *delete_notice
+
+              action_error_destroy:  *delete_error
+
+              view_no_index_items:                     "No matching currencies can be found."
+              view_symbol_hint:                        "(with spaces for padding if necessary, e.g. \" $\")"
+
+            # Multiple entries; restricted actions.
+            #
+            donations:
+              name:                                    "Donations"
+              action_title_new:      &new_title        "Make a donation"
+              action_title_show:                       "Invoice"
+              action_title_index:                      "All donations"
+
+              action_title_create:   *new_title
+              action_notice_create:  *new_notice
+
+              view_state_initial:                      "Underway"
+              view_state_paid:                         "Paid"
+
+              view_your_donations:                     "Your donations"
+              view_other_donations:                    "Donations made by %{name}"
+              view_no_index_items:                     "No matching donations can be found."
+
+              view_preamble_hint:                      "You are about to contribute to bounty \"%{poll_title}\"."
+              view_payment_amount_hint:                "How much would you like to donate?"
+              view_payment_method_hint:                "Payment method"
+              view_payment_onsite_hint:                "On-site with a credit or debit card"
+              view_payment_offsite_hint:               "Off-site with PayPal"
+              view_payment_not_stored:                 "Neither payment card details nor any information about a PayPal account will be stored by this site."
+
+              view_not_tax_invoice:                    "This information is generated for your records. This is not a tax invoice."
+
+              view_debit:                              "(Expired)"
+              view_redistribution:                     "(Redistribution from %{source})"
+
+            # Translatable general help messages (see HelpController).
+            #
+            help:
+              action_title_show:                       "Help"
+
+              view_poll_state_help_intro:              "Bounties have various states:"
+              view_poll_state_help_a_open:             "Donations are invited. Each donation counts as a vote. When the total donated reaches a target amount, the task associated with the bounty can begin."
+              view_poll_state_help_b_underway:         "The bounty has reached its target and the associated task is now underway. Donations are no longer accepted."
+              view_poll_state_help_c_completed:        "The task associated with the bounty has been completed and the item is now closed."
+              view_poll_state_help_d_expired:          "The bounty did not reach its target in a reasonable timeframe so it was expired. Any donations it may have attracted were distributed evenly between all other bounties open at the moment of expiry."
+
+              view_card_cvv:                           "The CVV (Card Verification Value, sometimes called the card security code) is a three or four digit number usually printed on or close to the top right of the signature strip on the back of your card, or in some card types such as American Express, on the front and towards the right hand side, above the embossed main card number."
+              view_card_cvv_image_attribution:         "Source: %{link}"
+
+            # Incoming payment processing - common.
+            #
+            payment_gateway:
+              view_confirm_preamble:                   "Please confirm your donation:"
+              view_confirm_details:                    "Donate %{amount} to bounty \"%{poll_title}\""
+              view_billing_address:                    "Billing address:"
+              view_additional_notes:                   "Additional notes:"
+              view_pay:                                "Confirm donation and pay"
+              view_explain:                            "If you decide to complete the donation process, only a basic record of your donation is stored, for your future reference. No card address or PayPal account information is retained."
+
+            # Incoming payment processing - off-site gateway (e.g. PayPal
+            # express checkout).
+            #
+            payment_gateway_offsite:
+              action_title_edit:                       "Confirm your donation"
+              action_title_delete:                     "Cancel donation"
+
+              action_notice_update:                    "Your donation was successful. Thanks for your support!"
+
+              view_cancelled:                          "The donation process has been cancelled. You have not been charged any money."
+
+              error_donation_details_wrong:            "Donation details cannot be found. Your payment session may have expired, or a donations page may have been loaded accidentally from your web browser history. You have not been charged any money. If you have a donation you wish to make, please try donating again."
+              error_paypal:                            "Sorry, PayPal express checkout is not available due to a technical fault: '%{message}'. Please try another payment method."
+              error_failed_but_not_charged:            "Sorry, your purchase could not be processed due to an unexpected error. You have not been charged. Please try again later (technical information: '%{message}')"
+              error_failed_but_maybe_charged:          "Sorry, your purchase could not be processed fully due to an unexpected error. You might have been charged! Please check your account and contact the system administrator at '%{admin}', including the full text of this error message (technical information: '%{message}')"
+
+            # Incoming payment processing - on-site gateway (direct card
+            # payments).
+            #
+            payment_gateway_onsite:
+              action_title_new:      &new_title        "Please enter your payment details"
+              action_title_create:   *new_title
+              action_title_delete:                     "Cancel donation"
+
+              action_notice_create:                    "Payment details accepted. To complete your donation, please review the details below."
+              action_notice_update:                    "Your donation was successful. Thanks for your support!"
+
+              view_card_type_switch:                   "Switch"
+              view_card_type_visa:                     "Visa or Visa Debit"
+              view_card_type_diners_club:              "Diners Club"
+              view_card_type_master:                   "Mastercard"
+              view_card_type_forbrugsforeningen:       "Forbrugsforeningen"
+              view_card_type_dankort:                  "Dankort"
+              view_card_type_laser:                    "Laser"
+              view_card_type_american_express:         "American Express"
+              view_card_type_solo:                     "Solo"
+              view_card_type_jcb:                      "JCB"
+              view_card_type_discover:                 "Discover"
+              view_card_type_maestro:                  "Maestro"
+
+              view_review_order:                       "Review donation details and pay"
+
+            # Multiple entries; full set of read/write actions.
+            #
+            polls:
+              name:                                    "Bounty"
+              action_title_new:      &new_title        "Add a new bounty"
+              action_title_edit:     &edit_title       "Edit bounty description"
+              action_title_show:                       "Bounty details"
+              action_title_index:                      "All bounties"
+              action_title_delete:   &delete_title     "Delete bounty"
+
+              action_title_create:   *new_title
+              action_title_update:   *edit_title
+              action_title_destroy:  *delete_title
+
+              action_notice_new:     &new_notice       "The bounty was successfully created."
+              action_notice_delete:  &delete_notice    "The bounty was successfully deleted."
+
+              action_notice_create:  *new_notice
+              action_notice_edit:    *details_updated
+              action_notice_update:  *details_updated
+              action_notice_destroy: *delete_notice
+
+              action_error_delete:   &delete_error     "A bounty cannot be deleted once it has attracted one or more donations."
+
+              action_error_destroy:  *delete_error
+
+              view_state_a_open:                       "Open"
+              view_state_b_underway:                   "Underway"
+              view_state_c_completed:                  "Completed"
+              view_state_d_expired:                    "Expired"
+
+              view_menu_no_change:                     "No change"
+              view_state_change_care_hint:             "Take care! State changes cannot be undone."
+              view_cannot_change_currency_hint:        "Currency cannot change after the bounty has attracted donations."
+
+              view_your_polls:                         "Your bounties"
+              view_other_polls:                        "Bounties created by %{name}"
+
+              view_no_index_items:                     "No matching bounties can be found."
+              view_list_of_donations:                  "Donations"
+
+              view_preview:                            "Preview"
+              view_preview_no_js:                      "The preview will only work if your browser has robust support for JavaScript enabled."
+
+            # Multiple entries; restricted set of actions.
+            #
+            users:
+              name:                                    "Local users"
+              action_title_show:                       "User account details"
+              action_title_index:                      "Local user list"
+              action_title_delete:   &delete_title     "Delete user account"
+              action_title_destroy:  *delete_title
+
+              action_notice_delete:  &delete_notice    "The user account was successfully deleted."
+              action_notice_destroy: *delete_notice
