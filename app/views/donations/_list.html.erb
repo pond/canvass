@@ -30,7 +30,7 @@
     </thead>
 
     <tbody>
-<%   for donation in @items %>
+<%   for donation in @items -%>
       <tr class="<%= cycle( 'odd', 'even' ) %>">
 <%     if ( current_user.admin? ) -%>
 <%       if ( donation.redistribution? ) -%>
