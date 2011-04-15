@@ -26,7 +26,7 @@
     <tbody>
 <%   for poll in @items %>
       <tr class="<%= cycle( 'odd', 'even' ) %> poll_state <%= poll.workflow_state %>">
-        <td><%=h poll.title %></td>
+        <td><%= link_to( ( h poll.title ), poll ) %></td>
         <td class="poll_state <%= poll.workflow_state %>">
           <%= apphelp_state( poll.workflow_state ) %>
           <%= help_link( "poll_states" ) %>
@@ -42,7 +42,9 @@
       <tr>
         <td colspan="5">
           <div class="pagination">
-            <%= apphelp_i18n_will_paginate( @items ) %>
+            <%= apphelp_i18n_will_paginate( @items ) %><br />
+            <a href="/content/documents/bounties">More information</a> |
+            <a href="/forum/forums/8">Forum</a>
           </div>
           <div class="buttons">
             <%= apphelp_protected_button_to( :new, { :method => :new_poll_path } ) %>
