@@ -59,16 +59,6 @@ class User < ActiveRecord::Base
   SEARCH_COLUMNS = %w{name email}
 
   # ===========================================================================
-  # PERMISSIONS
-  # ===========================================================================
-
-  # Write-only public accessor methods.
-
-  def email=( value )
-    write_attribute :email, ( value ? value.downcase : nil )
-  end
-
-  # ===========================================================================
   # GENERAL
   # ===========================================================================
 
