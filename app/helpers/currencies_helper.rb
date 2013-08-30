@@ -91,7 +91,7 @@ module CurrenciesHelper
     #       :align => 'top',
     #       :class => 'currency_converter'
     #     ),
-    #     "http://www.google.com/search?q=convert+#{ formatted_value }+#{ currency.code }+to+#{ current_user.location.currency.code }",
+    #     "https://www.google.com/search?q=convert+#{ formatted_value }+#{ currency.code }+to+#{ current_user.location.currency.code }",
     #     :target => '_blank',
     #     :class  => 'help'
     #   )
