@@ -205,6 +205,12 @@ module ApplicationHelper
     apphelp_view_hint( "state_#{ state }", ctrl )
   end
 
+  # As "apphelp_state", but works with event names.
+  #
+  def apphelp_event( event, ctrl = controller )
+    apphelp_view_hint( "event_#{ event }", ctrl )
+  end
+
   # Constructs links to controllers and actions based on whether or not users
   # can perform given actions.
   #

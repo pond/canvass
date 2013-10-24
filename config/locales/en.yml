@@ -96,7 +96,7 @@ en:
     org:
       pond:
         canvass:
-          site_name:                                   "Canvass"
+          site_name:                                   "RISC OS Open"
           site_tagline:                                "...your opinion"
 
           action_names:
@@ -327,6 +327,11 @@ en:
               view_state_c_completed:                  "Completed"
               view_state_d_expired:                    "Expired"
 
+              view_event_underway:                     "Get underway"
+              view_event_expired:                      "Expire"
+              view_event_completed:                    "Complete"
+              view_event_reverted:                     "Revert to open"
+
               view_menu_no_change:                     "No change"
               view_state_change_care_hint:             "Take care! State changes cannot be undone."
               view_cannot_change_currency_hint:        "Currency cannot change after the bounty has attracted donations."
@@ -336,6 +341,7 @@ en:
 
               view_no_index_items:                     "No matching bounties can be found."
               view_list_of_donations:                  "Donations"
+              view_matching_pot:                       "%{amount} left for matching"
 
               view_preview:                            "Preview"
               view_preview_no_js:                      "The preview will only work if your browser has robust support for JavaScript enabled."

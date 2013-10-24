@@ -179,6 +179,11 @@ class Poll < ActiveRecord::Base
       # the developer be taking "too long" to complete the work. That's up to
       # individual administrators or organisations to assess.
       #
+      # Administrators may choose to revert a poll, if it turns out it was
+      # not really being developed or a developer halts work. The poll is
+      # still wanted, so not expired; it returns to an OPEN state. No money
+      # is redistributed.
+      #
       # Organisations may choose to pay developers before or after they
       # complete work. The general recommendation is to do so only when the
       # poll reaches a STATE_COMPLETED state, but again, individual
@@ -187,6 +192,7 @@ class Poll < ActiveRecord::Base
       state STATE_UNDERWAY do
         event :completed, :transitions_to => STATE_COMPLETED
         event :expired,   :transitions_to => STATE_EXPIRED
+        event :reverted,  :transitions_to => STATE_OPEN
       end
 
       # STATE_COMPLETED: Work on the poll completed; the associated feature is

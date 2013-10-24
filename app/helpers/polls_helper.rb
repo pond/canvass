@@ -66,12 +66,30 @@ module PollsHelper
       ''
     ]
 
+    # 'Events' is a hash of event names yielding event data. Collect this to
+    # an array of key/value pairs and sort using the value's "transitions_to"
+    # field. State names have "a_", "b_" etc. prefixes so that they sort in a
+    # rational order for the progression from one state to another.
+
+    events = item.current_state.events.dup.collect.sort do | a, b |
+      a[ 1 ].transitions_to.to_s <=> b[ 1 ].transitions_to.to_s
+    end
+
+    # Generate a menu from this array using the translated event name for the
+    # visible text and the state name to which the item should be transitioned
+    # as the associated form value. We use the sorted array from above rather
+    # than the raw events data as the raw events hash is not sorted by logical
+    # transition order (hashes are not inherently sorted and event names do
+    # not have the sortable prefix convention used for state names).
+
     form.select(
       :workflow_state,
-      item.allowed_new_states.collect { | state |
-        [ apphelp_state( state, PollsController ), state ]
+      events.collect { | event |
+        event_name = event[ 0 ]
+        event_data = event[ 1 ]
+        [ apphelp_event( event_name, PollsController ), event_data.transitions_to ]
       }.unshift( blank_entry ),
       :selected => ''
     )
-  end 
+  end
 end
