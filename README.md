@@ -1,4 +1,4 @@
-= Canvass v1.0.0 2011-03-21
+== Canvass v1.0.0 2011-03-21
 
 Canvass lets you define polls which are 'voted' on by users who make
 financial donations to a cause.
