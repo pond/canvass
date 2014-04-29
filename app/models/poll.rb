@@ -5,6 +5,7 @@
 # Purpose:: Describe a bounty poll.
 # ----------------------------------------------------------------------
 #           30-Jan-2011 (ADH): Created.
+#           24-Oct-2013 (ADH): Added 'reverted' event.
 ########################################################################
 
 class Poll < ActiveRecord::Base
@@ -177,7 +178,8 @@ class Poll < ActiveRecord::Base
       #
       # Administrators can still choose to expire a poll if they wish, should
       # the developer be taking "too long" to complete the work. That's up to
-      # individual administrators or organisations to assess.
+      # individual administrators or organisations to assess. The poll is
+      # considered abandoned and money redistributed to others.
       #
       # Administrators may choose to revert a poll, if it turns out it was
       # not really being developed or a developer halts work. The poll is
