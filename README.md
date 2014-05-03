@@ -3,9 +3,14 @@
 Canvass lets you define polls which are 'voted' on by users who make
 financial donations to a cause.
 
-This is a customised version for RISC OS Open, copied from the master
-SVN repository. At the time of writing it isn't generally useful (certain
-shared ROOL view components are missing).
+This copy relies on a shared sign-on system called Hub which is not
+generally available in GitHub nor all that easy to set up. You can
+find it on http://pond.org.uk/ and, if you can get it going, then
+it should set up login cookies that Canvass then uses.
+
+RISC OS Open run a customised version of Canvass under their bounty
+scheme at http://www.riscosopen.org/ - their Subversion repository
+contains the code.
 
 
 ## Changes
