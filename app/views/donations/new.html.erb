@@ -22,8 +22,34 @@
   </p>
 
   <p>
+<%   if current_user.admin? -%>
+    <table border="0" cellspacing="0" cellpadding="0" class="no_border abuted">
+      <tr valign="top">
+        <td>
+          <%= radio_button_tag( :payment_method, :none, params[ :payment_method ] == 'none' ) -%>
+        </td>
+        <td>
+          <%= label_tag( :payment_method_none, apphelp_view_hint( :payment_none_hint ) ) %>
+          <table border="0" cellspacing="0" cellpadding="0" class="no_border abuted">
+            <tr valign="top">
+              <td align="right">
+                <small><em><%= apphelp_view_hint( :and_if_so_donor_name ) %></em></small>
+              </td>
+              <td><%= text_field_tag( :payment_none_donor_name ) %></td>
+            </tr>
+            <tr valign="top">
+              <td align="right">
+                <small><em><%= apphelp_view_hint( :and_donor_email ) %></em></small>
+              </td>
+              <td><%= text_field_tag( :payment_none_donor_email ) %></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+<%   end -%>
 <%   unless ( PaymentGateway.instance.gateway_is_express_only() ) -%>
-    <%= radio_button_tag( :payment_method, :onsite, params[ :payment_method ] != 'offsite' ) -%>
+    <%= radio_button_tag( :payment_method, :onsite, params[ :payment_method ] == 'onsite' ) -%>
     <%= label_tag( :payment_method_onsite, apphelp_view_hint( :payment_onsite_hint ) ) %>
 <%   end -%>
 <%   if ( PaymentGateway.instance.gateway_is_express_only() || PaymentGateway.instance.gateway_has_express_support() ) -%>

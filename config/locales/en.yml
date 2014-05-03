@@ -117,6 +117,7 @@ en:
             free:                                      "Free"
             ago:                                       "ago"
             you:                                       "You"
+            via:                                       "%{one} via %{two}" # As in "Donated by 'Foo via Bar'"
             range_from:                                "From" # See also the Messages controller view hint strings
             range_to:                                  "to"
             page_menu:                                 "Explore..."
@@ -223,7 +224,11 @@ en:
               view_payment_method_hint:                "Payment method"
               view_payment_onsite_hint:                "On-site with a credit or debit card"
               view_payment_offsite_hint:               "Off-site with PayPal"
+              view_payment_none_hint:                  "None - register an external donation"
               view_payment_not_stored:                 "Neither payment card details nor any information about a PayPal account will be stored by this site."
+              view_and_if_so_donor_name:               "and if so, optional donor name:"
+              view_and_donor_email:                    "and e-mail address:"
+              view_external_note:                      "External donation registered by administrator"
 
               view_not_tax_invoice:                    "This information is generated for your records. This is not a tax invoice."
 
@@ -301,7 +306,7 @@ en:
             polls:
               name:                                    "Bounty"
               action_title_new:      &new_title        "Add a new bounty"
-              action_title_edit:     &edit_title       "Edit bounty description"
+              action_title_edit:     &edit_title       "Edit bounty details"
               action_title_show:                       "Bounty details"
               action_title_index:                      "All bounties"
               action_title_delete:   &delete_title     "Delete bounty"
@@ -330,7 +335,7 @@ en:
               view_event_underway:                     "Get underway"
               view_event_expired:                      "Expire"
               view_event_completed:                    "Complete"
-              view_event_reverted:                     "Revert to open"
+              view_event_reverted:                     "Revert to Open"
 
               view_menu_no_change:                     "No change"
               view_state_change_care_hint:             "Take care! State changes cannot be undone."

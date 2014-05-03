@@ -1,4 +1,4 @@
-# Canvass v1.0.1 2013-10-24
+# Canvass v1.0.2 2014-05-03
 
 Canvass lets you define polls which are 'voted' on by users who make
 financial donations to a cause.
@@ -9,6 +9,9 @@ shared ROOL view components are missing).
 
 
 ## Changes
+
+* v1.0.2: Allow adminstrators to register external donations (e.g. made by
+          cheque) rather than only supporting through-Canvass payments.
 
 * v1.0.1: Add administrator ability to revert an underway bounty to an
           open state.

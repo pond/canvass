@@ -35,6 +35,12 @@ module DonationsHelper
   def donationshelp_user_link( donation )
     if ( donation.user.nil? )
       h( donation.user_name )
+    elsif ( donation.user_name != donation.user.name )
+      t(
+        :'uk.org.pond.canvass.generic_messages.via',
+        :one => h( donation.user_name ),
+        :two => link_to( h( donation.user.name ), donation.user )
+      ).html_safe()
     else
       link_to( h( donation.user_name ), donation.user )
     end

@@ -15,6 +15,12 @@
     <th><%= Donation.human_attribute_name( :amount_for_sorting ) %></th>
     <td><%= currencyhelp_compose( @donation.currency, @donation.amount_integer, @donation.amount_fraction ) %></td>
   <tr>
+<% if current_user.admin? -%>
+  <tr>
+    <th><%= Donation.human_attribute_name( :notes ) %></th>
+    <td><%= h( @donation.notes ) %></td>
+  <tr>
+<% end -%>
 </table>
 
 <p>

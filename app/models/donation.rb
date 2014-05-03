@@ -297,9 +297,19 @@ class Donation < Collectable
   # THE OBJECT IS NOT SAVED to allow for validations to be checked at a higher
   # level. THE CALLER MUST SAVE THE OBJECT unless it is temporary.
   #
-  def self.generate_for( poll, donor, donation_integer, donation_fraction )
+  # As a special case for administrators registering external donations, you
+  # can pass override options in the last parameter for the recorded user name
+  # and e-mail address. The donation is still recorded against the given User
+  # in the second parameter - this should be the admin - but the name and
+  # e-mail can be different (e.g. the admin fills this into a form). Set keys
+  # ":external" to "true", ":name" to the human readable person's full name and
+  # ":email" to the e-mail address. If nil, an empty string is stored. If you
+  # fail to pass ":external => true" in the options, then the administrator's
+  # in-progress initial state donations, if any, may be accidentally wiped.
+  #
+  def self.generate_for( poll, donor, donation_integer, donation_fraction, options = {} )
 
-    self.safely_destroy_initial_state_donations_for( donor )
+    self.safely_destroy_initial_state_donations_for( donor ) unless options[ :external ] == true
 
     return Donation.transaction do
 
@@ -309,10 +319,13 @@ class Donation < Collectable
 
       # Create the new donation object.
 
+      options[ :name  ] = donor.name  unless options.has_key?( :name  )
+      options[ :email ] = donor.email unless options.has_key?( :email )
+
       donation = Donation.new(
         :user            => donor,
-        :user_name       => donor.name,
-        :user_email      => donor.email,
+        :user_name       => options[ :name  ] || "",
+        :user_email      => options[ :email ] || "",
 
         :poll            => poll,
         :poll_title      => poll.title,

@@ -59,29 +59,66 @@ class DonationsController < ApplicationController
   def new
     @poll     = Poll.find_by_id( params[ :poll_id ] )
     @donation = Donation.generate_for( @poll, current_user, '0', '0' )
+    params[ :payment_method ] = current_user.admin? ? 'none' : 'onsite'
   end
 
   # POST /polls/<n>/donations
   def create
+
+    payment_method = params[ :payment_method ]
+
+    redirect_to root_path() and return if (
+      %w{ none onsite offsite }.include?( payment_method ) == false ||
+      ( payment_method == 'none' && current_user.admin? == false )
+    )
+
+    # Here, we know that the payment method parameter is valid and the
+    # current user has permission to use whatever method was specified.
+
     begin
+      options = {}
+
+      if ( payment_method == 'none' )
+        options[ :external ] = true
+        options[ :name     ] = params[ :payment_none_donor_name  ]
+        options[ :email    ] = params[ :payment_none_donor_email ]
+      end
+
       @poll     = Poll.find_by_id( params[ :poll_id ] )
       @donation = Donation.generate_for(
         @poll,
         current_user,
         params[ :donation ][ :amount_integer  ],
-        params[ :donation ][ :amount_fraction ]
+        params[ :donation ][ :amount_fraction ],
+        options
       )
+
     rescue => error
       appctrl_report_error( error )
-      redirect_to root_path
+      redirect_to root_path()
+
     end
 
-    if @donation.save
-      if ( params[ :payment_method ] == 'onsite' )
-        redirect_to new_poll_payment_gateway_onsite_path( @poll )
-      else
-        redirect_to new_poll_payment_gateway_offsite_path( @poll )
+    saved = @donation.save
+
+    if ( saved && payment_method == 'none' )
+      saved = Donation.transaction do
+        @donation.notes          = t( :'uk.org.pond.canvass.controllers.donations.view_external_note' )
+        @donation.invoice_number = InvoiceNumber.next!
+        @donation.paid! # See Workflow state machine definitions in donation.rb
+        @donation.save
       end
+    end
+
+    if saved
+      redirect_to( case payment_method
+        when 'onsite'
+          new_poll_payment_gateway_onsite_path( @poll )
+        when 'offsite'
+          new_poll_payment_gateway_offsite_path( @poll )
+        when 'none'
+          poll_path( @poll )
+      end )
     else
       render :action => 'new'
     end
