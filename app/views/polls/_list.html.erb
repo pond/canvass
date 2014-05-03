@@ -42,33 +42,7 @@
       <tr>
         <td colspan="5">
           <div class="pagination">
-            <%= apphelp_i18n_will_paginate( @items ) %><br />
-<%
-   if ( defined?( MATCHING_POT_LOCATION ) &&
-        defined?( MATCHING_POT_CURRENCY ) &&
-        File.exists?( MATCHING_POT_LOCATION ) )
-
-     string   = ( File.open( MATCHING_POT_LOCATION, 'r' ) { | f | f.readline } ).chomp()
-     currency = Currency.find_by_code( MATCHING_POT_CURRENCY )
-
-     unless ( currency.nil? || string.to_f.zero? )
--%>
-            <strong>
-              <%=
-                  link_to(
-                    apphelp_view_hint(
-                      :matching_pot,
-                      controller,
-                      :amount => currencyhelp_print( currency, string )
-                    ),
-                    '/content/documents/bounties/matching'
-                  )
-              %>
-            </strong> |
-<%   end -%>
-<% end -%>
-            <a href="/content/documents/bounties">More information</a> |
-            <a href="/forum/forums/8">Forum</a>
+            <%= apphelp_i18n_will_paginate( @items ) %>
           </div>
           <div class="buttons">
             <%= apphelp_protected_button_to( :new, { :method => :new_poll_path } ) %>
