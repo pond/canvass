@@ -1,0 +1,56 @@
+<!-- Global header. This site uses tables around more "pure" -->
+<!-- CSS layout to ensure basic structure remains intact in  -->
+<!-- some of the older browsers used under RISC OS.          -->
+
+<div id="template_header_background"><div id="template_header_shadow_left" class="template_shadow_left"><div id="template_header_shadow_right" class="template_shadow_right"><div id="template_header_content" class="template_header_content template_overall_content">
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr class="template_title_background" valign="middle">
+    <td>
+      <div class="template_logo template_primary_logo">
+        <a href="/content/" class="powered">
+          Your logo here, if any
+        </a>
+      </div>
+      <h1 class="template_title">
+        Your low-end browser alt text here, if any
+      </h1>
+      <br />
+      <div class="template_subtitle">
+        Your sub-title / tagline here, if any
+      </div>
+    </td>
+    <td valign="middle" align="right">
+      <div class="template_secondary_logo">
+        <a href="/content/" class="powered">
+          Secondary<br />
+          logo here,<br />
+          if any</b>
+        </a>
+      </div>
+    </td>
+  </tr>
+</table>
+
+</div></div></div></div>
+
+<!-- Global navigation strip -->
+
+<div id="template_header_links_background"><div id="template_header_links_shadow_left" class="template_shadow_left"><div id="template_header_links_shadow_right" class="template_shadow_right"><div id="template_header_links_content" class="template_header_content template_overall_content">
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr class="template_navigation_background" bgcolor="#d5ffc4">
+    <td class="template_navigation_left" align="left" valign="middle">
+      <a href="/bounty/" class="template_navigation">Polls</a>
+      <span class="template_navigation_divider">&nbsp;|&nbsp;</span>
+      <a href="/app1/" class="template_navigation">App 1</a>
+      <span class="template_navigation_divider">&nbsp;|&nbsp;</span>
+      <a href="/app2/" class="template_navigation">App 2</a>
+      <span class="template_navigation_divider">&nbsp;|&nbsp;</span>
+      <a href="/app3" class="template_navigation">App 3</a>
+    </td>
+    <td class="template_navigation_login" align="right" valign="middle"><% unless @service_fault %><a href="<%= ENV["HUB_PATH_PREFIX"] %>/account/login_conditional"><img src="<%= ENV["HUB_PATH_PREFIX"] %>/account/login_indication" alt="Account" border="0" height="18" width="72" /></a><% end %></td>
+  </tr>
+</table>
+
+</div></div></div></div>
