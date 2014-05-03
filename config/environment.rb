@@ -63,7 +63,7 @@ Rails::Initializer.run do |config|
   config.gem 'fastercsv',      :version => '>= 1.5.3'
   config.gem 'ya2yaml',        :version => '>= 0.30'
   config.gem 'locale',         :version => '>= 2.0.5'
-  config.gem 'will_paginate',  :version => '>= 2.3.15'
+  config.gem 'will_paginate',  :version => '=  2.3.16'
   config.gem 'good_sort',      :version => '>= 0.2.4'
   config.gem 'workflow',       :version => '>= 0.8.0'
   config.gem 'activemerchant', :version => '>= 1.12.0', :lib => 'active_merchant'
