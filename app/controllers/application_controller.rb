@@ -32,8 +32,8 @@ class ApplicationController < ActionController::Base
   require 'hub_sso_lib'
   include HubSsoLib::Core
 
-  before_filter :hubssolib_beforehand
-  after_filter  :hubssolib_afterwards
+  before_action :hubssolib_beforehand
+  after_action  :hubssolib_afterwards
 
   # https://github.com/collectiveidea/acts_as_audited/issues/26 - "Audt record
   # has no user on first request posted to a server". Recommended workaround is
@@ -50,11 +50,11 @@ class ApplicationController < ActionController::Base
 
   # Other filters
 
-  before_filter :assign_real_user
-  before_filter :set_best_locale
-  before_filter :set_language_dependent_sorting
-  before_filter :set_email_host_and_protocol
-  before_filter :run_garbage_collectors
+  before_action :assign_real_user
+  before_action :set_best_locale
+  before_action :set_language_dependent_sorting
+  before_action :set_email_host_and_protocol
+  before_action :run_garbage_collectors
 
   # List of models which have translatable columns.
 
@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
   # nil if not logged in, though you should check "logged_in?" first rather
   # than rely on this.
   #
-  # See also before_filter-called "assign_real_user()".
+  # See also before_action-called "assign_real_user()".
   #
   def current_user
     @current_user
@@ -486,7 +486,7 @@ protected
   # Make sure that "params[ :id ]" retrieves an object where "user_id" is equal
   # to the ID of the current user. If not, an authorisation failure will be
   # forced, unless the current user is an administrator. Usually called as a
-  # before_filter method for edit-like or destroy-like actions only.
+  # before_action method for edit-like or destroy-like actions only.
   #
   # There must be a current user - a previous item in the filter chain must
   # ensure this.

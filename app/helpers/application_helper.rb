@@ -104,12 +104,38 @@ module ApplicationHelper
   def apphelp_site_name
     t( :'uk.org.pond.canvass.site_name' )
   end
-  
+
   # Return an internationalised version of the web site's tagline if defined,
   # else a blank string.
   #
   def apphelp_site_tagline
     t( :'uk.org.pond.canvass.site_tagline', :default => '' )
+  end
+
+  # Turn the Hub and Rails flash data into a simple series of H2 entries,
+  # with Hub data first, Rails flash data next. A container DIV will hold
+  # zero or more H2 entries:
+  #
+  #   <div class="flash">
+  #     <h2 class="flash foo">Bar</h2>
+  #   </div>
+  #
+  # ...where "foo" is the flash key, e.g. "alert", "notice" and "Bar" is
+  # the flash value, made HTML-safe.
+  #
+  def apphelp_flash
+    data = hubssolib_flash_data()
+    html = ""
+
+    return tag.div( :class => 'flash' ) do
+      data[ 'hub' ].each do | key, value |
+        concat( tag.h2( value, :class => "flash #{ key }" ) )
+      end
+
+      data[ 'standard' ].each do | key, value |
+        concat( tag.h2( value, :class => "flash #{ key }" ) )
+      end
+    end
   end
 
   # Return an internationalised version of the given action name. If 'true'

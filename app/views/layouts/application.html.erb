@@ -30,7 +30,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" align="center">
       <tr valign="top" align="left">
         <td width="75%">
-<div class="flash"><%= hubssolib_flash_tags -%></div>
+          <%= apphelp_flash() %>
           <div class="content">
 <% unless controller.skip_main_heading? -%>
             <h1><%= apphelp_heading() %></h1>

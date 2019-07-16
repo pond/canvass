@@ -1,4 +1,4 @@
-# Canvass v1.0.2 2014-05-03
+# Canvass v2.0.0 2019-07-15
 
 Canvass lets you define polls which are 'voted' on by users who make
 financial donations to a cause.
@@ -14,6 +14,8 @@ contains the code.
 
 
 ## Changes
+
+* v2.0.0: Rebuilt under Rails 5.
 
 * v1.0.2: Allow adminstrators to register external donations (e.g. made by
           cheque) rather than only supporting through-Canvass payments.

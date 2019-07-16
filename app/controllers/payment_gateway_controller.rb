@@ -12,8 +12,8 @@ class PaymentGatewayController < ApplicationController
 
   include ActiveMerchant::Billing
 
-  before_filter :ensure_user_is_valid_and_find_donation
-  before_filter :ensure_donation_is_valid_and_set_variables, :except => [ :edit, :delete ]
+  before_action :ensure_user_is_valid_and_find_donation
+  before_action :ensure_donation_is_valid_and_set_variables, :except => [ :edit, :delete ]
 
   # Cancel payment.
   #
@@ -41,7 +41,7 @@ protected
   # Returns 'true' if successful or 'false' on failure, in which case an
   # error message has been set in the Flash and redirection has been requested.
   #
-  # Called by a before_filter for most actions, so only really needed to be
+  # Called by a before_action for most actions, so only really needed to be
   # invoked directly if there's a gateway response to consider.
   #
   def ensure_donation_is_valid_and_set_variables( gateway_response = nil )
@@ -75,7 +75,7 @@ protected
 
 private
 
-  # Call as a before_filter. Ensures that a user is logged in and sets
+  # Call as a before_action. Ensures that a user is logged in and sets
   # "@donation" to the user's initial state Donation object. If this is
   # "nil" afterwards, something went wrong; abort the process.
   #
