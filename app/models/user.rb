@@ -28,12 +28,6 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
   validates_length_of     :email, :within  => 6..MAXLEN_EMAIL # 6 => "r@a.wk"
 
-  # Almost nothing is accessible to mass assignment.
-
-  attr_accessible(
-    :name
-  )
-
   # See Jason King's "good_sort" plugin:
   #
   #   http://github.com/JasonKing/good_sort/tree/master

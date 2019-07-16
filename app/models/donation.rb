@@ -15,7 +15,7 @@ class Donation < Collectable
   # CHARACTERISTICS
   # ===========================================================================
 
-  acts_as_audited :except => [ :amount_for_sorting, :authorisation_tokens ]
+  audited :except => [ :amount_for_sorting, :authorisation_tokens ]
 
   # The user's name and e-mail address along with the poll's title is copied
   # into the donation object. While it's useful to have a link back to the

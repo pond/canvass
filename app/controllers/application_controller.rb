@@ -35,19 +35,6 @@ class ApplicationController < ActionController::Base
   before_action :hubssolib_beforehand
   after_action  :hubssolib_afterwards
 
-  # https://github.com/collectiveidea/acts_as_audited/issues/26 - "Audt record
-  # has no user on first request posted to a server". Recommended workaround is
-  # included below. We take advantage of this in passing by defining another
-  # sweeper (see "config/initializers/10_define_auditer_sweeper.rb") which adds
-  # a copy of a User's name into an Audit record so that the record still has
-  # useful data present even if the associated User is later deleted.
-
-  require 'acts_as_audited/audit'
-  require 'acts_as_audited/audit_sweeper'
-
-  cache_sweeper :audit_sweeper,   :only => [ :create, :update, :destroy ]
-  cache_sweeper :auditer_sweeper, :only => [ :create, :update, :destroy ]
-
   # Other filters
 
   before_action :assign_real_user
@@ -511,7 +498,7 @@ private
   #
   def access_denied
     if ( user_signed_in? )
-      render :file   => File.join( RAILS_ROOT, 'public', '404.html' ),
+      render :file   => File.join( Rails.root, 'public', '404.html' ),
              :status => :not_found
     else
       authenticate_user!
@@ -564,7 +551,7 @@ private
   # on HTTP headers if nobody is logged in right now.
   #
   def set_best_locale
-    if ( RAILS_ENV == 'test' )
+    if ( Rails.env == 'test' )
       code = 'en'
     else
       code = Translation.reconcile_user_data_with_http_request_language(

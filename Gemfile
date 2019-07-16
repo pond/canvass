@@ -3,20 +3,21 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.5.3'
 
+gem 'duktape'
+gem 'tzinfo-data'
+gem 'hubssolib', '~> 1.0', require: 'hub_sso_lib'
+gem 'rails-observers'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.3'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'pg', '= 0.18.4' # TODO: Version lock is a ROOL / RISC OS Open customisation
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'mini_racer', platforms: :ruby
-
-gem 'duktape'
-gem 'tzinfo-data'
-gem 'hubssolib', '~> 1.0', require: 'hub_sso_lib'
+# Use Thin for web server in development
+gem 'thin'
 
 # https://github.com/collectiveidea/audited
 gem 'audited', '~> 4.7'
@@ -25,7 +26,7 @@ gem 'will_paginate', '~> 3.1'
 # https://github.com/geekq/workflow
 gem 'workflow', '~> 2.0'
 # https://github.com/activemerchant/active_merchant
-gem 'activemerchant', '~> 1.95', :lib => 'active_merchant'
+gem 'activemerchant', '~> 1.95', require: 'active_merchant'
 # http://github.com/jgarber/redcloth
 gem 'RedCloth', '~> 4.3'
 
@@ -47,6 +48,9 @@ end
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
+
+  # https://github.com/yamldb/yaml_db
+  gem 'yaml_db', '~> 0.7'
 end
 
 group :test do

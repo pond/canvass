@@ -10,7 +10,7 @@
 
 class Poll < ActiveRecord::Base
 
-  acts_as_audited :protect => false, :except => [ :total_for_sorting ]
+  audited :protect => false, :except => [ :total_for_sorting ]
 
   belongs_to :user
   belongs_to :currency
@@ -37,10 +37,6 @@ class Poll < ActiveRecord::Base
       errors.add( :currency_id, :cannot_change_currency )
     end
   end
-
-  attr_accessible :title,
-                  :description,
-                  :currency_id
 
   # Keep a for-sorting cache column up to date.
   #

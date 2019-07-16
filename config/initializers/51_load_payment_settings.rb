@@ -8,8 +8,8 @@
 #           06-Mar-2011 (ADH): Imported from Artisan.
 ########################################################################
 
-settings = YAML::load_file( File.join( RAILS_ROOT, 'config', 'payment_gateway.yml' ) )
-settings = settings[ RAILS_ENV ]
+settings = YAML::load_file( File.join( Rails.root, 'config', 'payment_gateway.yml' ) )
+settings = settings[ Rails.env ]
 
 # Support 'real' ActiveMerchant gateway classes as well as any we might have
 # defined within Artisan.

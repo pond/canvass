@@ -127,7 +127,7 @@ class PollsController < ApplicationController
           end
         end
 
-        @poll.update_attributes( params[ :poll ] ) # Becomes value of transaction block
+        @poll.update_attributes( poll_params ) # Becomes value of transaction block
       end
 
     rescue => error
@@ -167,5 +167,13 @@ class PollsController < ApplicationController
       appctrl_set_flash :error
       redirect_to( @poll )
     end
+  end
+
+  private
+
+  def poll_params
+    params.permit :title,
+                  :description,
+                  :currency_id
   end
 end

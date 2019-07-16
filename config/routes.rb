@@ -11,8 +11,8 @@ Rails.application.routes.draw do
   # and show actions are supported to keep things simple.
   #
   resources :users, :only => [ :index, :show, :delete ] do | user |
-    user.resources :polls,     :only => [ :index, :show ]
-    user.resources :donations, :only => [ :index, :show ]
+    resources :polls,     :only => [ :index, :show ]
+    resources :donations, :only => [ :index, :show ]
   end
 
   # Privileged users browse donations without limiting the scope by user ID.
@@ -25,9 +25,9 @@ Rails.application.routes.draw do
   #
   resources :donations, :only => [ :index, :show ]
   resources :polls do | poll |
-    poll.resources :donations, :only => [ :index, :show, :new, :create ]
-    poll.resource  :payment_gateway_onsite,  :controller => :payment_gateway_onsite,  :member => { :delete => :get }
-    poll.resource  :payment_gateway_offsite, :controller => :payment_gateway_offsite, :member => { :delete => :get }
+    resources :donations, :only => [ :index, :show, :new, :create ]
+    resource  :payment_gateway_onsite,  :controller => :payment_gateway_onsite,  :member => { :delete => :get }
+    resource  :payment_gateway_offsite, :controller => :payment_gateway_offsite, :member => { :delete => :get }
   end
 
   # Full currency support, for number formatting, editing etc. (CRUD interface
