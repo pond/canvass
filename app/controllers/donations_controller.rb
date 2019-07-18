@@ -9,9 +9,6 @@
 
 class DonationsController < ApplicationController
 
-  uses_prototype()
-  uses_leightbox( :only => :index )
-
   @@hubssolib_permissions = HubSsoLib::Permissions.new( {
     :index  => [ :admin, :webmaster, :privileged, :normal ],
     :show   => [ :admin, :webmaster, :privileged, :normal ],

@@ -106,12 +106,11 @@ class Poll < ActiveRecord::Base
     end
   end
 
-  # See the "translatable_columns" plugin:
+  # See the Traco gem:
   #
-  #   http://github.com/iain/translatable_columns/tree/master
-  #   http://iain.nl/2008/09/plugin-translatable_columns/
-
-  translatable_columns( *columns_for_translation() )
+  #   https://github.com/barsoom/traco
+  #
+  translates( *columns_for_translation() )
 
   def self.translated_column( name )
     Translation.translated_column( self, name ) # See this for details

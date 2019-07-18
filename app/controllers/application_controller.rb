@@ -20,13 +20,6 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details.
   protect_from_forgery
 
-  filter_parameter_logging :card_type,
-                           :card_number,
-                           :card_cvv,
-                           :card_to,
-                           :card_from,
-                           :card_issue
-
   # Hub single sign-on support.
 
   require 'hub_sso_lib'
@@ -275,10 +268,13 @@ protected
       # the values come from the form submission so cannot be trusted. Someone
       # might try inserting bits of SQL in there to hack the site.
 
-      case radio
-      when "and": sql_fragment = " AND (#{ sql_fragment })"
-      when "or":  sql_fragment =  " OR (#{ sql_fragment })"
-      else        sql_fragment =      "(#{ sql_fragment })"
+      sql_fragment = case radio
+        when "and"
+          " AND (#{ sql_fragment })"
+        when "or"
+          " OR (#{ sql_fragment })"
+        else
+          "(#{ sql_fragment })"
       end
 
       query << sql_fragment
@@ -551,16 +547,15 @@ private
   # on HTTP headers if nobody is logged in right now.
   #
   def set_best_locale
-    if ( Rails.env == 'test' )
-      code = 'en'
+    I18n.locale = if ( Rails.env == 'test' )
+      'en'
+    elsif request.headers.key?('HTTP_ACCEPT_LANGUAGE')
+      string = request.headers.fetch('HTTP_ACCEPT_LANGUAGE')
+      locale = AcceptLanguage.intersection(string, I18n.default_locale, *I18n.available_locales)
+      locale || I18n.default_locale
     else
-      code = Translation.reconcile_user_data_with_http_request_language(
-        request,
-        logged_in? ? current_user : nil
-      )
+      I18n.default_locale
     end
-
-    Translation.set_best_locale( code )
   end
 
   # To use sorting and translatable columns together, we have to reset the

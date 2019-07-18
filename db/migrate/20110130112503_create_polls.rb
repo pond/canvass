@@ -17,11 +17,11 @@ class CreatePolls < ActiveRecord::Migration[4.2]
       #   t.string :title_<default-locale-code>, :limit => Poll::MAXLEN_TITLE
       #   t.text   :body_<default-locale-code>
 
-      t.column Poll.column_name_localized( 'title', I18n.default_locale() ).to_sym,
+      t.column Poll.current_locale_column( 'title' ).to_sym,
                Poll.column_type( :title ),
                Poll.column_options( :title )
 
-      t.column Poll.column_name_localized( 'description', I18n.default_locale() ).to_sym,
+      t.column Poll.current_locale_column( 'description' ).to_sym,
                Poll.column_type( :description ),
                Poll.column_options( :description )
 

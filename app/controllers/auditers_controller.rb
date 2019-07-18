@@ -9,9 +9,6 @@
 
 class AuditersController < ApplicationController
 
-  uses_prototype( :only => :index )
-  uses_leightbox( :only => :index )
-
   @@hubssolib_permissions = HubSsoLib::Permissions.new( {
     :index  => [ :admin, :webmaster ]
   } )

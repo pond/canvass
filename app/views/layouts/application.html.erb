@@ -3,21 +3,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<%= csrf_meta_tag.gsub( /^/, '    ' ) %>
-
     <title><%= apphelp_title %></title>
 
-<%= include_prototype_if_used( '    ' ) -%>
-<%= include_lightwindow_if_used( '    ' ) -%>
-<%= include_leightbox_if_used( '    ' ) -%>
-<% if using_quiet_prototype? -%>
-    <%= javascript_include_tag( 'canvass/redcloth_preview.js' ) %>
-<% end -%>
-    <link href="/hub/stylesheets/shared.css" media="all" rel="stylesheet" type="text/css" />
-    <%= stylesheet_link_tag( 'default_general', :media => :all   ) %>
-    <%= stylesheet_link_tag( 'default_print',   :media => :print ) %>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
   </head>
+
   <body>
     <div id="header_and_content">
 <%= render 'shared/fixed_header' %>

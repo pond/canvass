@@ -27,7 +27,7 @@ class CreateInvoiceNumbers < ActiveRecord::Migration[4.2]
     # Define the default singleton.
 
     directory = File.join( Rails.root, 'test', 'fixtures' )
-    Fixtures.create_fixtures( directory, 'invoice_numbers' )
+    ActiveRecord::FixtureSet.create_fixtures( directory, 'invoice_numbers' )
   end
 
   # In a production system, dropping the invoice numbers table is fairly

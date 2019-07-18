@@ -11,9 +11,6 @@
 
 class PollsController < ApplicationController
 
-  uses_prototype()
-  uses_leightbox( :only => [ :index, :show ] )
-
   @@hubssolib_permissions = HubSsoLib::Permissions.new( {
     :create  => [ :admin, :webmaster ],
     :new     => [ :admin, :webmaster ],

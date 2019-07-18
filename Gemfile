@@ -18,15 +18,26 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # Use Thin for web server in development
 gem 'thin'
+# assistance for "AcceptLanguage" HTTP header processing:
+# https://github.com/cyril/accept_language.rb
+gem 'accept_language', '~> 1.0'
 
+# Remember who changed what, when:
 # https://github.com/collectiveidea/audited
 gem 'audited', '~> 4.7'
+# Pagination:
 # https://github.com/mislav/will_paginate
 gem 'will_paginate', '~> 3.1'
+# Model state machines:
 # https://github.com/geekq/workflow
 gem 'workflow', '~> 2.0'
+# Translatable columns:
+# https://github.com/barsoom/traco
+gem 'traco', '~> 5.0'
+# Payment gateways:
 # https://github.com/activemerchant/active_merchant
 gem 'activemerchant', '~> 1.95', require: 'active_merchant'
+# Textile (Canvass predates the wider popularity of Markdown):
 # http://github.com/jgarber/redcloth
 gem 'RedCloth', '~> 4.3'
 
