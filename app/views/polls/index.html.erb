@@ -1,5 +1,5 @@
 <h1><%= pollshelp_index_text( @user ) %></h1>
-<% if ( params[:q].present? ) -%><h3><%=t( :'uk.org.pond.canvass.search.results' ) %></h3><% end %>
+<% if ( apphelp_has_search_results? ) -%><h3><%=t( :'uk.org.pond.canvass.search.results' ) %></h3><% end %>
 
 <%
   # Make sure that "@items" contains the pagination-enabled list of items to
@@ -48,7 +48,6 @@
           </div>
           <div class="buttons">
             <%= apphelp_protected_button_to( :new, { :method => :new_poll_path } ) %>
-<%= render :partial => 'shared/leightbox_button' %>
           </div>
         </td>
       </tr>

@@ -238,6 +238,17 @@ module ApplicationHelper
     apphelp_view_hint( "event_#{ event }", ctrl )
   end
 
+  # Does this page seem to have been fetched with a Ransack search parameter?
+  #
+  def apphelp_has_search_results?
+    q = params[ :q ]
+
+    q&.delete( 's' )
+    q&.delete_if { | key, value | value.blank? }
+
+    q.present?
+  end
+
   # Constructs links to controllers and actions based on whether or not users
   # can perform given actions.
   #
@@ -734,7 +745,7 @@ HTML
     result << '<td>' << edit << '</td>' unless ( edit.empty? )
     result << '<td>' << dsty << '</td>' unless ( dsty.empty? )
 
-    return result << "</tr></table>"
+    return (result << "</tr></table>").html_safe
   end
 
   # As will_paginate, but uses internationalised next/previous link text and

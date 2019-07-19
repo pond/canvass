@@ -1,7 +1,7 @@
 <h1><%= h @poll.title %></h1>
 
 <p />
-<%= RedCloth.new( @poll.description || '' ).to_html %>
+<%= RedCloth.new( @poll.description || '' ).to_html.html_safe %>
 
 <table border="1" cellspacing="1" cellpadding="0">
   <tr>

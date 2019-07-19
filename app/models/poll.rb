@@ -63,6 +63,10 @@ class Poll < ActiveRecord::Base
 
   ransack_alias :simple, SIMPLE_SEARCH_FIELD
 
+  ransacker :total_for_sorting do
+    Arel.sql("to_char(total_for_sorting, '9999999.99')")
+  end
+
   # ===========================================================================
   # PERMISSIONS
   # ===========================================================================
