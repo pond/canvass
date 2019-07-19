@@ -9,6 +9,7 @@
 ########################################################################
 
 module ApplicationHelper
+  include Pagy::Frontend
 
   # This has to be a class variable rather than a constant else Rails tends to
   # crash with e.g. "cannot remove Object::APPHELP_BUTTON_MAPPINGS" from a deep
@@ -578,8 +579,6 @@ module ApplicationHelper
   #   ==========   ============================================================
   #   indent        Optional indent string, used as a prefix on each line of
   #                 output.
-  #   input_class   Class name for INPUT tag; default is "obvious" if omitted.
-  #   input_name    Name for INPUT tag; default is "msie6_commit_changes".
   #   button_class  Class name for BUTTON tag; always has "round" added;
   #                 default is "positive".
   #   button_name   Name for BUTTON tag; default is "commit_changes".
@@ -604,8 +603,6 @@ module ApplicationHelper
     end
 
     indent       = options.delete( :indent       )
-    input_name   = options.delete( :input_name   ) || 'msie6_commit_changes'
-    input_class  = options.delete( :input_class  ) || 'obvious'
     button_name  = options.delete( :button_name  ) || 'commit_changes'
     button_class = options.delete( :button_class ) || 'positive'
     button_image = options.delete( :button_image )

@@ -17,7 +17,7 @@ class Auditer < Audited::Audit
   # parameters aliased as "simple".
 
   DEFAULT_SORT = 'created_at DESC'
-  SIMPLE_SEARCH_FIELD = :auditable_type_username_or_action_or_changes
+  SIMPLE_SEARCH_FIELD = :auditable_type_username_or_action_or_audited_changes
   ransack_alias :simple, SIMPLE_SEARCH_FIELD
 
 end

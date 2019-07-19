@@ -77,11 +77,12 @@ class PollsController < ApplicationController
 
   # POST /polls
   def create
-    @poll                = Poll.new( params[ :poll ] )
+    @poll                = Poll.new( poll_params() )
     @poll.user           = current_user()
     @poll.votes          = 0
     @poll.total_integer  = '0'
     @poll.total_fraction = '0'
+    @poll.workflow_state = Poll::STATE_OPEN
 
     Poll.transaction do
       if @poll.save
@@ -165,8 +166,6 @@ class PollsController < ApplicationController
   private
 
   def poll_params
-    params.permit :title,
-                  :description,
-                  :currency_id
+    params[ :poll ].permit(Poll::UPDATEABLE_ATTRIBUTES)
   end
 end

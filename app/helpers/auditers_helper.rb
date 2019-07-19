@@ -30,7 +30,7 @@ module AuditersHelper
   #
   def auditershelp_changes( record )
     type      = record.auditable_type
-    changes   = record.changes
+    changes   = record.audited_changes
     model     = type.constantize
     translate = model.respond_to?( :columns_for_translation )
 
@@ -40,7 +40,7 @@ module AuditersHelper
     output << '<tr><th>' <<
               apphelp_view_hint( :change_details_field ) <<
               '</th><th>'
-              
+
     if ( record.action == "create" )
       output << apphelp_view_hint( :change_details_became )
     elsif ( record.action == "destroy" )

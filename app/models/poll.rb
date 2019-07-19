@@ -33,10 +33,14 @@ class Poll < ActiveRecord::Base
   validate :currency_alteration_is_permitted
 
   def currency_alteration_is_permitted
-    if ( changes.has_key?( 'currency_id' ) && votes > 0 )
+    if ( audited_changes.has_key?( 'currency_id' ) && votes > 0 )
       errors.add( :currency_id, :cannot_change_currency )
     end
   end
+
+  # For Rails strong parameters support - see PollsController.
+  #
+  UPDATEABLE_ATTRIBUTES = [:title, :description, :currency_id]
 
   # Keep a for-sorting cache column up to date.
   #

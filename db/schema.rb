@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_044000) do
+ActiveRecord::Schema.define(version: 2019_07_19_061822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,11 +22,17 @@ ActiveRecord::Schema.define(version: 2019_07_19_044000) do
     t.string "user_type"
     t.string "username"
     t.string "action"
-    t.text "changes"
+    t.text "audited_changes"
     t.integer "version", default: 0
     t.datetime "created_at"
+    t.string "comment"
+    t.string "remote_address"
+    t.string "request_uuid"
+    t.integer "association_id"
+    t.string "association_type"
     t.index ["auditable_id", "auditable_type"], name: "auditable_index"
     t.index ["created_at"], name: "index_audits_on_created_at"
+    t.index ["request_uuid"], name: "index_audits_on_request_uuid"
     t.index ["user_id", "user_type"], name: "user_index"
   end
 
