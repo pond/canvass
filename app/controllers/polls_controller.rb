@@ -34,22 +34,18 @@ class PollsController < ApplicationController
     @user            = nil
     extra_conditions = nil
     user_id          = params[ :user_id ]
+    scope            = Poll.all
 
     unless ( user_id.nil? )
-      redirect_to polls_path and return unless ( current_user.admin? )
+      redirect_to polls_path and return unless ( current_user&.admin? )
 
       @user = User.find_by_id( user_id )
       redirect_to polls_path and return if ( @user.nil? )
 
-      extra_conditions = [ 'user_id = ?', @user.id ]
+      scope = scope.where(user_id: @user.id)
     end
 
-    appctrl_search_sort_and_paginate(
-      Poll,
-      :default_sorting  => { 'down' => '', 'field' => 'workflow_state' },
-      :extra_conditions => extra_conditions,
-      :always_sort_by   => "\"polls\".#{ Poll.translated_column( :title ) }"
-    )
+    appctrl_search_sort_and_paginate(Poll, scope: scope)
   end
 
   # GET /polls/1
@@ -58,12 +54,12 @@ class PollsController < ApplicationController
 
     # The following is for the admin-only nested donations list.
 
-    if ( current_user.try( :admin? ) )
+    if ( current_user&.admin? )
       params[ :poll_id ] = @poll.id
+
       appctrl_search_sort_and_paginate(
         Donation,
-        :default_sorting  => Donation.default_sort_hash(),
-        :extra_conditions => Donation.conditions_for( params, current_user )
+        scope: Donation.conditions_for( params, current_user )
       )
     end
   end

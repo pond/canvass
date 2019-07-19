@@ -25,15 +25,15 @@ gem 'accept_language', '~> 1.0'
 # Remember who changed what, when:
 # https://github.com/collectiveidea/audited
 gem 'audited', '~> 4.7'
-# Pagination:
-# https://github.com/mislav/will_paginate
-gem 'will_paginate', '~> 3.1'
+# Fast pagination:
+# https://github.com/ddnexus/pagy
+gem 'pagy', '~> 3.3'
+# Searching and sorting:
+# https://github.com/activerecord-hackery/ransack
+gem 'ransack', '~> 2.1'
 # Model state machines:
 # https://github.com/geekq/workflow
 gem 'workflow', '~> 2.0'
-# Translatable columns:
-# https://github.com/barsoom/traco
-gem 'traco', '~> 5.0'
 # Payment gateways:
 # https://github.com/activemerchant/active_merchant
 gem 'activemerchant', '~> 1.95', require: 'active_merchant'

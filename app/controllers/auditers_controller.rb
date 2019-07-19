@@ -18,9 +18,6 @@ class AuditersController < ApplicationController
   end
 
   def index
-    appctrl_search_sort_and_paginate(
-      Auditer,
-      :default_sorting => { 'down' => 'true', 'field' => 'created_at' }
-    )
+    appctrl_search_sort_and_paginate(Auditer)
   end
 end

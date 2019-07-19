@@ -30,14 +30,13 @@ class DonationsController < ApplicationController
 
     # The Donation model takes care of permissions for users trying to view
     # the donations of other users and so-forth within its "conditions_for"
-    # class method. If the user hacks around with URLs they might get an odd
+    # scope. If the user tries to hack around with URLs they might get an odd
     # title such as "All Donations", but the list will only contain things
     # they're allowed to see (e.g. for non-admins, only their donations).
-
+    #
     appctrl_search_sort_and_paginate(
       Donation,
-      :default_sorting  => Donation.default_sort_hash(),
-      :extra_conditions => Donation.conditions_for( params, current_user )
+      scope: Donation.conditions_for( params, current_user )
     )
   end
 

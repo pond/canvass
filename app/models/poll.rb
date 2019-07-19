@@ -51,80 +51,13 @@ class Poll < ActiveRecord::Base
 
   before_save :update_sorting_amount
 
-  # How many entries to list per index page? See the Will Paginate plugin:
-  #
-  #   http://wiki.github.com/mislav/will_paginate
+  # Searching and sorting is via Ransack, with a cross-column set of search
+  # parameters aliased as "simple".
 
-  def self.per_page
-    MAXIMUM_LIST_ITEMS_PER_PAGE
-  end
+  DEFAULT_SORT        = 'workflow_state ASC'
+  SIMPLE_SEARCH_FIELD = :workflow_state_or_title_or_description_or_total_for_sorting
 
-  # Search columns for views rendering the "shared/_simple_search.html.erb"
-  # view partial and using "appctrl_build_search_conditions" to handle queries.
-
-  SEARCH_COLUMNS = %w{ workflow_state#pollhelp_search_states title description total_for_sorting }
-
-  # Set up sorting based on current locale. See Application Controller's
-  # "set_language_dependent_sorting" method for details.
-
-  SORT_COLUMNS = %w{title workflow_state votes total_for_sorting}
-
-  def self.set_sorting
-    columns = self.translated_sort_columns()
-    sort_on( *columns )
-  end
-
-  # ===========================================================================
-  # TRANSLATION
-  # ===========================================================================
-
-  # See "prepare_model_for_translation" in "translations_controller.rb" and the
-  # migrations.
-  #
-  # (In Canvass, the Translations Controller is not present - this was imported
-  # from Artisan which has a full GUI for translation editing and creation).
-  #
-  def self.columns_for_translation
-    [ 'title', 'description' ]
-  end
-
-  def self.column_type( name )
-    case name.to_sym
-      when :title
-        :string
-      when :description
-        :text
-    end
-  end
-
-  def self.column_options( name )
-    case name.to_sym
-      when :title
-        { :limit => Poll::MAXLEN_TITLE }
-      when :description
-        {}
-    end
-  end
-
-  # See the Traco gem:
-  #
-  #   https://github.com/barsoom/traco
-  #
-  translates( *columns_for_translation() )
-
-  def self.translated_column( name )
-    Translation.translated_column( self, name ) # See this for details
-  end
-
-  def self.untranslated_column( name_with_locale )
-    Translation.untranslated_column( self, name_with_locale ) # See this for details
-  end
-
-  # Return a list of translated, sortable columns.
-  #
-  def self.translated_sort_columns
-    SORT_COLUMNS.map { | name | self.translated_column( name ) }
-  end
+  ransack_alias :simple, SIMPLE_SEARCH_FIELD
 
   # ===========================================================================
   # PERMISSIONS
@@ -318,21 +251,6 @@ class Poll < ActiveRecord::Base
       end         # 'state STATE_EXPIRED do'
     end           # 'workflow do'
   end             # 'if ( Poll.table_exists? )'
-
-  # ===========================================================================
-  # GENERAL
-  # ===========================================================================
-
-  # Apply a default sort to the given array of model instances. The array is
-  # modified in place.
-  #
-  def self.apply_default_sort_order( array )
-    array.sort! { | x, y | x.title <=> y.title }
-  end
-
-  def thingytest
-    I18n.t("Hello")
-  end
 
   # Returns an array of state name symbols to which this object may be
   # transitioned given its current state.

@@ -1,0 +1,37 @@
+<%#
+  This template is i18n-ready: if you don't use i18n, then you can replace the pagy_t
+  calls with the actual strings ("&lsaquo; Prev", "Next &rsaquo;", "&hellip;").
+  The link variable is set to a proc that returns the link tag.
+  Usage: link.call( page_number [, text [, extra_attributes_string ]])
+  Render with e.g.:
+    render partial: 'shared/pagination', locals: {pagy: @pagy, q: @q}
+  The search form contains unique element IDs so should only be rendered once. If you
+  want multiple pagination bars, pass local "search: false" in all but one.
+-%>
+      <tr valign="top">
+
+<% link = pagy_link_proc(pagy, 'class="page-link"') -%>
+<%#                            -%><table border="0" cellspacing="0" cellpadding="0" class="no_border abuted">
+<%#                            -%>  <tr valign="middle">
+<% if pagy.prev                -%>    <td class="pager-prev"><%== link.call(pagy.prev, pagy_t('pagy.nav.prev')) %></td>
+<% else                        -%>    <td class="pager-prev pager-disabled"><a href="#"><%== pagy_t('pagy.nav.prev') %></a></td>
+<% end                         -%>
+<% pagy.series.each do |item| # series example: [1, :gap, 7, 8, "9", 10, 11, :gap, 36] -%>
+<%   if    item.is_a?(Integer) -%>    <td class="pager-item"><%== link.call(item) %></td>
+<%   elsif item.is_a?(String)  -%>    <td class="pager-active"><%== link.call(item) %></td>
+<%   elsif item == :gap        -%>    <td class="pager-disabled pager-gap"><a href="#"><%== pagy_t('pagy.nav.gap') %></a></td>
+<%   end                       -%>
+<% end                         -%>
+<% if pagy.next                -%>    <td class="pager-next"><%== link.call(pagy.next, pagy_t('pagy.nav.next'), 'aria-label="next"') %></td>
+<% else                        -%>    <td class="pager-next pager-disabled"><a href="#"><%== pagy_t('pagy.nav.next') %></a></td>
+<% end                         -%>
+<% unless defined?(search)     -%>
+<%#                            -%>    <td class="search" width="100%">
+<%#                            -%>    <%= search_form_for(q, class: 'search-form') do |f| %>
+<%#                            -%>      <%= f.hidden_field(:s, value: params.dig(:q, :s)) %>
+<%#                            -%>      <%= f.search_field('simple_cont', placeholder: t('uk.org.pond.canvass.search.results')) %>
+<%#                            -%>      <%= f.button(t('uk.org.pond.canvass.search.results'), type: 'submit') %>
+<%#                            -%>    <% end %>
+<%#                            -%>    </td>
+<% end                         -%>  </tr>
+<%#                            -%></table>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2011_02_23_110532) do
+ActiveRecord::Schema.define(version: 2019_07_19_044000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,8 +72,8 @@ ActiveRecord::Schema.define(version: 2011_02_23_110532) do
   end
 
   create_table "polls", id: :serial, force: :cascade do |t|
-    t.string "title_en", limit: 60
-    t.text "description_en"
+    t.string "title", limit: 60
+    t.text "description"
     t.integer "votes"
     t.integer "user_id"
     t.integer "currency_id"

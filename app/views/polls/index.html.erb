@@ -1,4 +1,58 @@
 <h1><%= pollshelp_index_text( @user ) %></h1>
-<% if ( @search_results ) -%><h3><%=t( :'uk.org.pond.canvass.search.results' ) %></h3><% end %>
-<%= render :partial => 'list' %>
-<%= render :partial => 'shared/simple_search' %>
+<% if ( params[:q].present? ) -%><h3><%=t( :'uk.org.pond.canvass.search.results' ) %></h3><% end %>
+
+<%
+  # Make sure that "@items" contains the pagination-enabled list of items to
+  # show and render with "render :partial => 'list'".
+-%>
+<div class="searchable_list" id="polls">
+<% if @items.empty? -%>
+  <%= apphelp_view_hint( :no_index_items ) %>
+  <p />
+  <div class="buttons">
+    <%= apphelp_protected_button_to( :new, { :method => :new_poll_path } ) %>
+  </div>
+  <br /><br />
+<% else -%>
+  <table border="1" cellspacing="1" cellpadding="0">
+    <thead>
+      <tr>
+        <th><%= sort_link(@q, :title ) %></th>
+        <th><%= sort_link(@q, :workflow_state ) %></th>
+        <th><%= sort_link(@q, :votes ) %></th>
+        <th><%= sort_link(@q, :total_for_sorting ) %></th>
+        <th class="corner">&nbsp;</th>
+      </tr>
+    </thead>
+
+    <tbody>
+<%   for poll in @items %>
+      <tr class="<%= cycle( 'odd', 'even' ) %> poll_state <%= poll.workflow_state %>">
+        <td><%= link_to( ( h poll.title ), poll ) %></td>
+        <td class="poll_state <%= poll.workflow_state %>">
+          <%= apphelp_state( poll.workflow_state ) %>
+          <%= help_link( "poll_states" ) %>
+        </td>
+        <td align="center"><%=h poll.votes %></td>
+        <td align="right"><%= currencyhelp_compose( poll.currency, poll.total_integer, poll.total_fraction ) %></td>
+        <td class="actions"><%= apphelp_index_actions( 'poll', poll ) %></td>
+      </tr>
+<%   end -%>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="5">
+          <div class="pagination">
+            <%= render partial: 'shared/pagination', locals: {pagy: @pagy, q: @q} %>
+          </div>
+          <div class="buttons">
+            <%= apphelp_protected_button_to( :new, { :method => :new_poll_path } ) %>
+<%= render :partial => 'shared/leightbox_button' %>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+<% end -%>
+</div>

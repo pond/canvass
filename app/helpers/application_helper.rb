@@ -429,7 +429,7 @@ module ApplicationHelper
       end
     end
 
-    return links
+    return links.html_safe
   end
 
   # A simple version of "apphelp_protected_link_to". Pass a model object
@@ -458,7 +458,7 @@ module ApplicationHelper
       obj
     ) { h( name ) }
 
-    return ( link.empty? ) ? h( name ) : link
+    return ( link.empty? ) ? h( name ) : link.html_safe
   end
 
   # Works as "apphelp_protected_link_to". In this case, though, the code calls
@@ -542,7 +542,7 @@ module ApplicationHelper
                  end
     end
 
-    return buttons
+    return buttons.html_safe()
   end
 
   # Generate a submit BUTTON with name "submit_changes" and a more traditional
@@ -635,22 +635,15 @@ module ApplicationHelper
     # Create the HTML string.
 
     html = <<HTML
-<!--[if IE 6]>
-#{ obj.send( method, action_or_string, { :class => input_class, :name => input_name, :onclick => confirm_data } ) }
-<div style="display: none;">
-<![endif]-->
 <button type="submit" class="#{ button_class }" id="#{ button_name }" name="#{ button_name }"#{ confirm_html }>
 #{ button_html }  #{ action_or_string }
 </button>
-<!--[if IE 6]>
-</div>
-<![endif]-->
 HTML
 
     # Indent and return the data.
 
     html.gsub!( /^/, indent ) unless ( indent.nil? || indent.empty? ) # Not 'indent.blank?', as this would ignore all-white-space strings
-    return html
+    return html.html_safe
   end
 
   # Return a form containing a button with JS deletion confirmation, which

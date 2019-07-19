@@ -28,40 +28,17 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email
   validates_length_of     :email, :within  => 6..MAXLEN_EMAIL # 6 => "r@a.wk"
 
-  # See Jason King's "good_sort" plugin:
-  #
-  #   http://github.com/JasonKing/good_sort/tree/master
-  #
-  # Must use "table_exists?", as good_sort needs to check the database but
-  # this class may be examined by migrations before the table is created.
+  # Searching and sorting is via Ransack, with a cross-column set of search
+  # parameters aliased as "simple".
 
-  sort_on :name,
-          :email,
-          :admin if User.table_exists?
+  DEFAULT_SORT        = 'name ASC'
+  SIMPLE_SEARCH_FIELD = :name_or_email
 
-  # How many entries to list per index page? See the Will Paginate plugin:
-  #
-  #   http://wiki.github.com/mislav/will_paginate
-  #
-  def self.per_page
-    MAXIMUM_LIST_ITEMS_PER_PAGE
-  end
-
-  # Search columns for views rendering the "shared/_simple_search.html.erb"
-  # view partial and using "appctrl_build_search_conditions" to handle queries.
-
-  SEARCH_COLUMNS = %w{name email}
+  ransack_alias :simple, SIMPLE_SEARCH_FIELD
 
   # ===========================================================================
   # GENERAL
   # ===========================================================================
-
-  # Apply a default sort to the given array of model instances. The array is
-  # modified in place.
-  #
-  def self.apply_default_sort_order( array )
-    array.sort! { | x, y | x.name <=> y.name }
-  end
 
   # Get a value from the user's preferences hash. The hash is nested in a
   # similar manner to the I18n module's translation hashes and is addressed
@@ -70,12 +47,6 @@ class User < ActiveRecord::Base
   #
   # Currently defined preferences include (but may not be limited to - this
   # list may be out of date) the following:
-  #
-  #   sorting => { <controller-name> => { <good_sort params hash entry> } }
-  #
-  #     Most recently recorded value of params[:sort] by an index action for
-  #     a controller identified by <controller_name>. For more information see
-  #     "appctrl_apply_sorting_preferences".
   #
   #   bounceback => nil or hash of bounceback data
   #

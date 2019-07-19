@@ -11,28 +11,13 @@
 #           23-Feb-2011 (ADH): Created.
 ########################################################################
 
-class Auditer < Audit
+class Auditer < Audited::Audit
 
-  # See Jason King's "good_sort" plugin:
-  #
-  #   http://github.com/JasonKing/good_sort/tree/master
-  #
-  # Must use "table_exists?", as good_sort needs to check the database but
-  # this class may be examined by migrations before the table is created.
+  # Searching and sorting is via Ransack, with a cross-column set of search
+  # parameters aliased as "simple".
 
-  sort_on :auditable_type, :username, :action, :created_at if Audit.table_exists?
-
-  # How many entries to list per index page? See the Will Paginate plugin:
-  #
-  #   http://wiki.github.com/mislav/will_paginate
-
-  def self.per_page
-    MAXIMUM_LIST_ITEMS_PER_PAGE
-  end
-
-  # Search columns for views rendering the "shared/_simple_search.html.erb"
-  # view partial and using "appctrl_build_search_conditions" to handle queries.
-
-  SEARCH_COLUMNS = %w{auditable_type username action changes}
+  DEFAULT_SORT = 'created_at DESC'
+  SIMPLE_SEARCH_FIELD = :auditable_type_username_or_action_or_changes
+  ransack_alias :simple, SIMPLE_SEARCH_FIELD
 
 end

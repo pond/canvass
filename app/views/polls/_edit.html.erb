@@ -1,4 +1,4 @@
-<%
+<%=
   # Render as follows:
   #
   #   render(
@@ -14,7 +14,7 @@
   # a "delete" button is shown for the :update case.
 
   form_for( poll ) do | f | %>
-  <%= f.error_messages %>
+  <%= render "shared/error_messages", :target => poll %>
 
   <table border="1" cellspacing="1" cellpadding="0">
     <tr>

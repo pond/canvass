@@ -51,7 +51,7 @@ class Donation < Collectable
                             :only_integer => true
 
   validate :credit_donations_must_be_above_zero
-  
+
   def credit_donations_must_be_above_zero
     if ( self.amount_for_sorting <= 0.0 && self.debit == false )
       self.errors.add :amount_for_sorting, :greater_than, :count => 0
@@ -72,32 +72,12 @@ class Donation < Collectable
 
   before_validation :update_sorting_amount
 
-  # See Jason King's "good_sort" plugin:
-  #
-  #   http://github.com/JasonKing/good_sort/tree/master
-  #
-  # As with Workflow (see later), must use a "table_exists?" check here.
+  # Searching and sorting is via Ransack, with a cross-column set of search
+  # parameters aliased as "simple".
 
-  if ( Donation.table_exists? )
-    sort_on( :updated_at,
-             :poll_title,
-             :user_name,
-             :user_email,
-             :amount_for_sorting )
-  end
-
-  # How many entries to list per index page? See the Will Paginate plugin:
-  #
-  #   http://wiki.github.com/mislav/will_paginate
-
-  def self.per_page
-    MAXIMUM_LIST_ITEMS_PER_PAGE
-  end
-
-  # Search columns for views rendering the "shared/_simple_search.html.erb"
-  # view partial and using "appctrl_build_search_conditions" to handle queries.
-
-  SEARCH_COLUMNS = %w{ poll_title user_name user_email amount_for_sorting }
+  DEFAULT_SORT = 'poll_title ASC'
+  SIMPLE_SEARCH_FIELD = :poll_title_or_user_name_or_user_email_or_amount_for_sorting
+  ransack_alias :simple, SIMPLE_SEARCH_FIELD
 
   # ===========================================================================
   # PERMISSIONS
@@ -191,23 +171,6 @@ class Donation < Collectable
   # GENERAL
   # ===========================================================================
 
-  # Apply a default sort to the given array of model instances. The array is
-  # modified in place. See also "default_sort_hash".
-  #
-  def self.apply_default_sort_order( array )
-    array.sort! { | x, y | y.updated_at <=> y.updated_at }
-  end
-
-  # Return the default sort hash for Donations objects to avoid duplication
-  # in the DonationsController and PollsController, both of which can generate
-  # sortable lists of donations. The hash is suitable for passing as the
-  # ":default_sorting" option to "appctrl_search_sort_and_paginate". See also
-  # "apply_default_sort_order".
-  #
-  def self.default_sort_hash
-    { 'down' => 'true', 'field' => 'updated_at' }
-  end
-
   # See the Collectable superclass for details.
   #
   def self.garbage_collect( session )
@@ -235,48 +198,29 @@ class Donation < Collectable
     end
   end
 
-  # Return a conditions array, suitable for passing as a value to the
-  # :conditions key in a 'find'-style operation, which returns only donations
+  # Return a conditions relation scope which limits result to only donations
   # that can be viewed by the user given in the last parameter.
   #
   # The first parameter can be e.g. a request's "params" hash - any has which
   # contains things like a 'user_id' key (or not), influencing the generated
   # constraints.
   #
-  # The returned constraints ensure that initial state items are not found.
-  #
-  # Note that sensible results are only returned in the presence of a current
-  # user value, so a user must be logged in if this method is called. Do NOT
-  # try to pass 'nil' in the last parameter.
-  #
-  def self.conditions_for( params, current_user )
+  scope :conditions_for, -> (params, current_user) do
     user_id = params[ :user_id ]
     poll_id = params[ :poll_id ]
 
     # Only administrators can do anything other than list their own donations.
     # To keep life simple, only administrators can get per-poll donations.
 
-    unless ( current_user.admin? )
+    unless ( current_user&.admin? )
       user_id = current_user.id
       poll_id = nil
     end
 
-    # Generate the constraints array.
-
-    constraints = 'workflow_state <> (?)'
-    arguments   = [ Donation::STATE_INITIAL.to_s ]
-
-    unless ( user_id.nil? )
-      constraints << ' AND user_id = (?)'
-      arguments   << user_id
-    end
-
-    unless ( poll_id.nil? )
-      constraints << ' AND poll_id = (?)'
-      arguments   << poll_id
-    end
-
-    return [ "(#{ constraints })" ] + arguments
+    query = where.not(workflow_state: Donation::STATE_INITIAL)
+    query = query.where(user_id: user_id) unless user_id.nil?
+    query = query.where(poll_id: poll_id) unless poll_id.nil?
+    query
   end
 
   # Build a Donation object for the given poll, donor, donation amount as

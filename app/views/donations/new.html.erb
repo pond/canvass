@@ -1,5 +1,5 @@
-<% form_for( [ :poll, @donation ] ) do | f | %>
-  <%= f.error_messages %>
+<%= form_for( [ :poll, @donation ] ) do | f | %>
+  <%= render "shared/error_messages", :target => @donation %>
 
   <p>
     <%= apphelp_view_hint( :preamble_hint, DonationsController, :poll_title => @poll.title ) %>

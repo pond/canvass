@@ -8,29 +8,32 @@
  *          18-Feb-2011 (ADH): Abridged version imported from Artisan.  *
 \************************************************************************/
 
-/* Hide components dedicated to web navigation only - these have no meaning
- * in print.
- */
+@media print {
 
-div#header_wrapper,
-div#above_footer,
-div#footer_wrapper,
-div#lightwindow,
-div#lightwindow_overlay,
-.buttons,
-.leightbox,
-.simple_search {
-  display: none !important;
-}
+  /* Hide components dedicated to web navigation only - these have no meaning
+   * in print.
+   */
 
-/* Clear data related to pushing content away from header or footer areas.
- */
+  div#header_wrapper,
+  div#above_footer,
+  div#footer_wrapper,
+  div#lightwindow,
+  div#lightwindow_overlay,
+  .buttons,
+  .leightbox,
+  .simple_search {
+    display: none !important;
+  }
 
-div#header_and_content {
-  min-height: 0;
-  padding-top: 0;
-}
+  /* Clear data related to pushing content away from header or footer areas.
+   */
 
-div.content {
-  padding-bottom: 0;
+  div#header_and_content {
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  div.content {
+    padding-bottom: 0;
+  }
 }

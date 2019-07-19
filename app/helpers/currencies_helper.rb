@@ -76,13 +76,13 @@ module CurrenciesHelper
     # Canvass doesn't use Locations like Artisan.
     #
     # # Build a currency converter link?
-    # 
+    #
     # if ( converter                             &&
     #      logged_in?                            &&
     #      ! current_user.location.nil?          &&
     #      ! current_user.location.currency.nil? &&
     #      current_user.location.currency_id != currency.id )
-    # 
+    #
     #   converter_link = " " + link_to(
     #     image_tag(
     #       'famfamfam_silk_icons/currency.png',
@@ -95,16 +95,16 @@ module CurrenciesHelper
     #     :target => '_blank',
     #     :class  => 'help'
     #   )
-    # 
+    #
     # end # (Else converter_link ends up 'nil' by default)
     converter_link = nil
 
     # Compile the result
 
     if ( currency.show_after_number )
-      return "#{ formatted_value }#{ currency.symbol }#{ converter_link }" 
+      return "#{ formatted_value }#{ currency.symbol }#{ converter_link }"
     else
-      return "#{ currency.symbol }#{ formatted_value }#{ converter_link }" 
+      return "#{ currency.symbol }#{ formatted_value }#{ converter_link }"
     end
   end
 
@@ -195,8 +195,8 @@ module CurrenciesHelper
   # the surrounding form is submitted).
   #
   def currencyhelp_menu( currencies, options = {} )
-    Currency.apply_default_sort_order( currencies )
-    values = currencies.collect { | c | [ "#{ h c.name }", c.id ] }
+    currencies = currencies.to_a.sort { | x, y | x.name <=> y.name }
+    values     = currencies.collect { | c | [ "#{ h c.name }", c.id ] }
 
     return apphelp_menu( values, :currency_id, options )
   end

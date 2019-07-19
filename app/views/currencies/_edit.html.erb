@@ -1,4 +1,4 @@
-<%
+<%=
   # Render as follows:
   #
   #   render(
@@ -14,7 +14,7 @@
   # "delete" button is shown for the :update case.
 
   form_for( currency ) do | f | %>
-  <%= f.error_messages %>
+  <%= render "shared/error_messages", :target => currency %>
 
   <p>
     <%= f.label :name %><br />

@@ -47,27 +47,12 @@ class Currency < ActiveRecord::Base
   DEFAULT_DECIMAL_PRECISION = 2
   DEFAULT_SHOW_AFTER_NUMBER = false
 
-  # See Jason King's "good_sort" plugin:
-  #
-  #   http://github.com/JasonKing/good_sort/tree/master
-  #
-  # Must use "table_exists?", as good_sort needs to check the database but
-  # this class may be examined by migrations before the table is created.
+  # Searching and sorting is via Ransack, with a cross-column set of search
+  # parameters aliased as "simple".
 
-  sort_on :name, :code, :symbol, :rounding_algorithm if Currency.table_exists?
-
-  # How many entries to list per index page? See the Will Paginate plugin:
-  #
-  #   http://wiki.github.com/mislav/will_paginate
-
-  def self.per_page
-    MAXIMUM_LIST_ITEMS_PER_PAGE
-  end
-
-  # Search columns for views rendering the "shared/_simple_search.html.erb"
-  # view partial and using "appctrl_build_search_conditions" to handle queries.
-
-  SEARCH_COLUMNS = %w{name code symbol rounding_algorithm}
+  DEFAULT_SORT = 'name ASC'
+  SIMPLE_SEARCH_FIELD = :name_or_code_or_symbol_or_rounding_algorithm
+  ransack_alias :simple, SIMPLE_SEARCH_FIELD
 
   # ===========================================================================
   # PERMISSIONS
@@ -160,13 +145,6 @@ class Currency < ActiveRecord::Base
   # GENERAL
   # ===========================================================================
 
-  # Apply a default sort to the given array of Currency objects. The array is
-  # modified in place.
-  #
-  def self.apply_default_sort_order( array )
-    array.sort! { | x, y | x.name <=> y.name }
-  end
-
   # Canvass doesn't use Locations like Artisan.
   #
   # # For first-time database setup and tests - establish static associations
@@ -182,11 +160,11 @@ class Currency < ActiveRecord::Base
   #     'Japan'                    => 'JPY',
   #     'United States of America' => 'USD'
   #   }
-  # 
+  #
   #   assoc.each do | name, code |
   #     location = Location.find( :first, :conditions => [ 'LOWER(name) LIKE LOWER(?)', "%#{ name }%" ] )
   #     currency = Currency.find_by_code( code )
-  # 
+  #
   #     if ( location && currency )
   #       location.currency = currency
   #       location.save!
@@ -354,7 +332,7 @@ private
   def self.permissive_clean( string )
     return string.to_s.gsub( /[^0-9\-.]/, '' )
   end
-  
+
   # Remove *all* characters that are not digits from the given string. Allow a
   # leading "-" for negative numbers, with optional white space before it, but
   # no other spurious preceding characters.

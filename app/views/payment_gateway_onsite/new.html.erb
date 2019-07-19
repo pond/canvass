@@ -1,7 +1,7 @@
 <h1><%= apphelp_heading() %></h1>
 
-<% form_for :payment_card, @item, :url => { :action => :create } do | f | %>
-  <%= f.error_messages %>
+<%= form_for :payment_card, @item, :url => { :action => :create } do | f | %>
+  <%= render "shared/error_messages", :target => @item %>
 
   <p>
     '<span class="required_indicator">(*)</span>' <%= apphelp_generic( :requirement_hint ) %>
@@ -94,7 +94,7 @@
               :delete,
               {
                 :method     => :delete_poll_payment_gateway_onsite_path,
-                :controller => PaymentGatewayOnsiteController, 
+                :controller => PaymentGatewayOnsiteController,
                 :model      => PaymentGateway,
                 :icon       => :cancel,
                 :variant    => :negative
