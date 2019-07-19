@@ -72,7 +72,7 @@ module PollsHelper
     # rational order for the progression from one state to another.
 
     events = item.current_state.events.dup.collect.sort do | a, b |
-      a[ 1 ].transitions_to.to_s <=> b[ 1 ].transitions_to.to_s
+      a[ 1 ].first.transitions_to.to_s <=> b[ 1 ].first.transitions_to.to_s
     end
 
     # Generate a menu from this array using the translated event name for the
@@ -87,7 +87,7 @@ module PollsHelper
       events.collect { | event |
         event_name = event[ 0 ]
         event_data = event[ 1 ]
-        [ apphelp_event( event_name, PollsController ), event_data.transitions_to ]
+        [ apphelp_event( event_name, PollsController ), event_data.first.transitions_to ]
       }.unshift( blank_entry ),
       :selected => ''
     )
