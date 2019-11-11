@@ -159,13 +159,11 @@ class Poll < ActiveRecord::Base
 
           unless ( self.votes.zero? )
             conditions = {
-              :conditions => {
-                :workflow_state => Poll::STATE_OPEN.to_s,
-                :currency_id    => self.currency_id
-              }
+              :workflow_state => Poll::STATE_OPEN.to_s,
+              :currency_id    => self.currency_id
             }
 
-            open_poll_count = Poll.count( conditions )
+            open_poll_count = Poll.where( conditions ).count
 
             if ( open_poll_count.zero? )
               self.errors.add( :workflow_state, :no_others_open )
@@ -203,9 +201,8 @@ class Poll < ActiveRecord::Base
               # there's a divide-by-one as the last remaining amount is added.
 
               polls_remaining = open_poll_count
-              conditions[ :lock ] = true
 
-              Poll.find_each( conditions ) do | poll |
+              Poll.lock.where( conditions ).find_each do | poll |
 
                 give_integer, give_fraction = Currency.divide(
                   self.total_integer, self.total_fraction,

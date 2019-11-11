@@ -46,6 +46,14 @@
     )
   %>
 </div>
+
+<% if VARIANT == :rool -%>
+<ul>
+  <li><a href="/content/documents/bounties">More information about the bounty scheme</a>
+  <li><a href="/forum/forums/8">Bounty scheme discussion forum</a>
+</ul>
+<% end -%>
+
 <% if current_user.try( :admin? ) && @poll.donations.count > 0 -%>
 
 <p />

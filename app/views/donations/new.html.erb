@@ -66,7 +66,7 @@
           :style => "margin-bottom: 15px;"
         )
 
-        label_tag( :payment_method_offsite, apphelp_view_hint( :payment_offsite_hint ) + "&nbsp;" + acceptance_mark )
+        label_tag( :payment_method_offsite, (apphelp_view_hint( :payment_offsite_hint ) + "&nbsp;" + acceptance_mark).html_safe() )
     %>
 <%   end -%>
   </p>

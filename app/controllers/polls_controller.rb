@@ -34,7 +34,12 @@ class PollsController < ApplicationController
     @user            = nil
     extra_conditions = nil
     user_id          = params[ :user_id ]
+    omit_closed      = params[ :closed  ].blank?
     scope            = Poll.all
+
+    if omit_closed
+      scope = scope.where.not( workflow_state: [ Poll::STATE_COMPLETED, Poll::STATE_EXPIRED ] )
+    end
 
     unless ( user_id.nil? )
       redirect_to polls_path and return unless ( current_user&.admin? )

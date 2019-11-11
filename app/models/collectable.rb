@@ -58,7 +58,7 @@ class Collectable < ActiveRecord::Base
 
       begin
         model.transaction do
-          model.destroy_all( conditions )
+          model.where(conditions).destroy_all()
         end
       rescue
         # Consume all exceptions

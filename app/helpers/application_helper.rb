@@ -103,7 +103,7 @@ module ApplicationHelper
   # Return an internationalised version of the web site's name.
   #
   def apphelp_site_name
-    t( :'uk.org.pond.canvass.site_name' )
+    t( :"uk.org.pond.canvass.site_name.variants.#{ VARIANT }" )
   end
 
   # Return an internationalised version of the web site's tagline if defined,

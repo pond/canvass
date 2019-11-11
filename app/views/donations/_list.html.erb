@@ -1,6 +1,6 @@
 <%
   # Make sure that "@items" contains the pagination-enabled list of items to
-  # show and render with "render :partial => 'list'".
+  # show and @q has Ransack data; render with "render :partial => 'list'".
 -%>
 <div class="searchable_list" id="donations">
 <% if @items.empty? -%>
@@ -11,29 +11,27 @@
   </div>
   <br /><br />
 <% else -%>
-  <table border="1" cellspacing="1" cellpadding="0">
+  <table cellspacing="1" cellpadding="0">
     <thead>
       <tr>
-        <%
-          sort_header_array  = params.has_key?( :poll_id ) && controller_name == "polls" ? [] : [ :poll_title ]
-          sort_header_array += %w{ amount_for_sorting updated_at }
-          sort_header_array  = %w{ user_name user_email } + sort_header_array if ( current_user.admin? )
-
-          table_head_colspan = sort_header_array.count
-
-          sort_headers_for :donation, sort_header_array do | header |
-            Donation.human_attribute_name( header )
-          end
-        %>
-        <th class="spinner corner"><div id="spinner" style="display: none"></div></th>
+<%   if current_user.admin? -%>
+        <th><%= sort_link(@q, :user_name) %></th>
+        <th><%= sort_link(@q, :user_email) %></th>
+<%   end -%>
+<%   unless params.has_key?( :poll_id ) && controller_name == "polls" -%>
+        <th><%= sort_link(@q, :poll_title) %><th>
+<%   end -%>
+        <th><%= sort_link(@q, :amount_for_sorting ) %></th>
+        <th><%= sort_link(@q, :updated_at ) %></th>
+        <th class="corner">&nbsp;</th>
       </tr>
     </thead>
 
     <tbody>
 <%   for donation in @items -%>
       <tr class="<%= cycle( 'odd', 'even' ) %>">
-<%     if ( current_user.admin? ) -%>
-<%       if ( donation.redistribution? ) -%>
+<%     if current_user.admin? -%>
+<%       if donation.redistribution? -%>
         <td>&mdash;</td>
         <td>&mdash;</td>
 <%       else -%>
@@ -41,7 +39,7 @@
         <td><%= mail_to( donation.user_email ) %></td>
 <%       end -%>
 <%     end -%>
-<%     unless ( params.has_key?( :poll_id ) && controller_name == "polls" ) %>
+<%     unless params.has_key?( :poll_id ) && controller_name == "polls" %>
         <td><%= donationshelp_poll_link( donation ) %></td>
 <%     end -%>
         <td class="financial">
@@ -71,16 +69,20 @@
     # add any buttons if so. If rendered by the Donations Controller, add them.
 
     if ( controller_name == "donations" )
+      header_count  = 2
+      header_count += 1 if current_user.admin?
+      header_count += 2 unless params.has_key?( :poll_id ) && controller_name == "polls"
 -%>
     <tfoot>
       <tr>
-        <td colspan="<%= table_head_colspan + 1 %>">
+        <td colspan="<%= header_count %>">
           <div class="pagination">
-            <%= apphelp_i18n_will_paginate( @items ) %>
+            <%= render partial: 'shared/pagination', locals: {pagy: @pagy, q: @q} %>
           </div>
+        </td>
+        <td>
           <div class="buttons">
             <%= apphelp_protected_button_to( :index, { :method => :polls_path, :controller => PollsController } ) %>
-<%=   render :partial => 'shared/leightbox_button' %>
           </div>
         </td>
       </tr>

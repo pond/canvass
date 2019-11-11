@@ -168,7 +168,7 @@ module CurrenciesHelper
     end
 
     result << currency.symbol if ( currency.show_after_number )
-    return result
+    return result.html_safe()
   end
 
   # Given an internal rounding algorithm name, return a human-readable

@@ -50,7 +50,7 @@ class InvoiceNumber < ActiveRecord::Base
   #
   def self.next!
     return InvoiceNumber.transaction do
-      generator = InvoiceNumber.find( :first, :lock => true ) # ...and only!
+      generator = InvoiceNumber.lock.first # ...and only!
       number    = ( generator.last_number_used += 1 )
 
       generator.save!

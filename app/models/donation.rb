@@ -133,15 +133,17 @@ class Donation < Collectable
       state STATE_PAID do
         on_entry do
 
+          self.workflow_state = STATE_PAID # TODO: Don't expect to need this but do; why?
+
           unless ( self.debit )
             Poll.transaction do # Transaction required for pessimistic lock
 
-              # That ":lock => true" is enough to eventually mean that the
-              # database layer works its magic and no matter how many threads
-              # run this code concurrently, they'll end up seralised and each
-              # work on an at-that-instant valid, up to date Poll object.
+              # That "lock" is enough to eventually mean that the database layer
+              # works its magic and no matter how many threads run this code
+              # concurrently, they'll end up seralised and each work on an
+              # at-that-instant valid, up to date Poll object.
 
-              poll = Poll.find_by_id( self.poll_id, :lock => true )
+              poll = Poll.lock.find(self.poll_id)
 
               if ( poll.nil? )
                 raise I18n.t( :'activerecord.errors.models.donation.poll_has_vanished' )
@@ -159,6 +161,7 @@ class Donation < Collectable
               )
 
               poll.save!
+
             end # Transaction required for pessimistic lock
           end   # 'unless ( self.debit )'
         end     # 'on_entry do'
@@ -191,10 +194,10 @@ class Donation < Collectable
   #
   def self.safely_destroy_initial_state_donations_for( user )
     Donation.transaction do
-      Donation.destroy_all(
+      Donation.where(
        :user_id        => user.id,
        :workflow_state => Donation::STATE_INITIAL.to_s
-      )
+      ).destroy_all()
     end
   end
 
@@ -277,7 +280,9 @@ class Donation < Collectable
         :currency        => poll.currency,
 
         :amount_integer  => donation_integer,
-        :amount_fraction => donation_fraction
+        :amount_fraction => donation_fraction,
+
+        :workflow_state  => Donation::STATE_INITIAL
       )
 
       donation # Transaction block return value

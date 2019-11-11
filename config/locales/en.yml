@@ -96,7 +96,10 @@ en:
     org:
       pond:
         canvass:
-          site_name:                                   "Canvass"
+          site_name:
+            variants:
+              default:                                 "Canvass"
+              rool:                                    "RISC OS Open"
           site_tagline:                                "...your opinion"
 
           action_names:

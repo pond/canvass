@@ -1,10 +1,6 @@
 <h1><%= pollshelp_index_text( @user ) %></h1>
 <% if ( apphelp_has_search_results? ) -%><h3><%=t( :'uk.org.pond.canvass.search.results' ) %></h3><% end %>
 
-<%
-  # Make sure that "@items" contains the pagination-enabled list of items to
-  # show and render with "render :partial => 'list'".
--%>
 <div class="searchable_list" id="polls">
 <% if @items.empty? -%>
   <%= apphelp_view_hint( :no_index_items ) %>
@@ -14,7 +10,7 @@
   </div>
   <br /><br />
 <% else -%>
-  <table border="1" cellspacing="1" cellpadding="0">
+  <table cellspacing="1" cellpadding="0">
     <thead>
       <tr>
         <th><%= sort_link(@q, :title ) %></th>
@@ -42,12 +38,54 @@
 
     <tfoot>
       <tr>
-        <td colspan="5">
+        <td colspan="4">
           <div class="pagination">
             <%= render partial: 'shared/pagination', locals: {pagy: @pagy, q: @q} %>
           </div>
+        </td>
+        <td>
           <div class="buttons">
             <%= apphelp_protected_button_to( :new, { :method => :new_poll_path } ) %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="5">
+          <div class="links">
+<% if params[ :closed ].blank? -%>
+            <%= link_to "Show closed &amp; expired items".html_safe, polls_path( :closed => 'yes' ) %>
+<% else -%>
+            <%= link_to "Hide closed &amp; expired items".html_safe, polls_path() %>
+<% end -%>
+<%
+   if ( VARIANT == :rool &&
+        defined?( MATCHING_POT_LOCATION ) &&
+        defined?( MATCHING_POT_CURRENCY ) &&
+        File.exists?( MATCHING_POT_LOCATION ) )
+
+     string   = ( File.open( MATCHING_POT_LOCATION, 'r' ) { | f | f.readline } ).chomp()
+     currency = Currency.find_by_code( MATCHING_POT_CURRENCY )
+
+     unless ( currency.nil? || string.to_f.zero? )
+-%>
+            | <strong>
+              <%=
+                  link_to(
+                    apphelp_view_hint(
+                      :matching_pot,
+                      controller,
+                      :amount => currencyhelp_print( currency, string )
+                    ),
+                    '/content/documents/bounties/matching'
+                  )
+              %>
+            </strong>
+<%   end -%>
+<% end -%>
+<% if VARIANT == :rool -%>
+            | <a href="/content/documents/bounties">More information</a> |
+            | <a href="/forum/forums/8">Forum</a>
+<% end -%>
           </div>
         </td>
       </tr>

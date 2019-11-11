@@ -43,11 +43,7 @@ class DonationsController < ApplicationController
   # GET /donations/<n>
   # GET /users/<u>/donations/<n>
   def show
-    @donation = Donation.find_by_id(
-      params[ :id ],
-      :conditions => Donation.conditions_for( params, current_user )
-    )
-
+    @donation = Donation.conditions_for( params, current_user ).find( params[ :id ] )
     redirect_to polls_path and return if @donation.nil?
   end
 
@@ -60,7 +56,6 @@ class DonationsController < ApplicationController
 
   # POST /polls/<n>/donations
   def create
-
     payment_method = params[ :payment_method ]
 
     redirect_to root_path() and return if (
@@ -95,14 +90,17 @@ class DonationsController < ApplicationController
 
     end
 
-    saved = @donation.save
+    saved = false
 
-    if ( saved && payment_method == 'none' )
-      saved = Donation.transaction do
+    Donation.transaction do
+      saved = @donation.save
+
+      if ( saved && payment_method == 'none' )
         @donation.notes          = t( :'uk.org.pond.canvass.controllers.donations.view_external_note' )
         @donation.invoice_number = InvoiceNumber.next!
         @donation.paid! # See Workflow state machine definitions in donation.rb
-        @donation.save
+
+        saved = @donation.save
       end
     end
 

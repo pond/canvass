@@ -90,20 +90,17 @@ private
   def ensure_user_is_valid_and_find_donation
     redirect_to( root_path() ) and return unless ( logged_in? )
 
-    @donation = Donation.find(
-      :all,
-      :conditions => {
-        :user_id        => current_user.id,
-        :workflow_state => Donation::STATE_INITIAL.to_s
-      }
+    donations = Donation.where(
+      :user_id        => current_user.id,
+      :workflow_state => Donation::STATE_INITIAL.to_s
     )
 
     # If we seem to get the wrong number of donations back - for a given user,
     # exactly 1 should be in initial state, no more, no less - then reset the
     # donation value to nil to indicate an error condition, else pick out the
     # single array item.
-
-    @donation = ( @donation.size != 1 ) ? nil : @donation[ 0 ]
+    #
+    @donation = @donations.count != 1 ? nil : donations.first
   end
 
   # Lazy-initialise and return a payment gateway instance based on the
