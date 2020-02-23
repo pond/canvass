@@ -29,10 +29,9 @@ module AuditersHelper
   # in human readable form.
   #
   def auditershelp_changes( record )
-    type      = record.auditable_type
-    changes   = record.audited_changes
-    model     = type.constantize
-    translate = model.respond_to?( :columns_for_translation )
+    type    = record.auditable_type
+    changes = record.audited_changes
+    model   = type.constantize
 
     return apphelp_view_hint( :no_other_details ) if ( changes.nil? or changes.empty? ) # Not 'changes.blank?', as this would ignore changes to 'false' since 'false.blank?' => 'true'
 
@@ -56,11 +55,6 @@ module AuditersHelper
     # A sorted change table is easier to follow on the whole
 
     keys = changes.keys.sort do | a, b |
-      if ( translate )
-        a = model.untranslated_column( a )
-        b = model.untranslated_column( b )
-      end
-
       model.human_attribute_name( a ) <=> model.human_attribute_name( b )
     end
 
@@ -72,7 +66,6 @@ module AuditersHelper
 
     keys.each do | key |
       cdata = changes[ key ]
-      key   = model.untranslated_column( key ) if ( translate )
 
       # Deal with amounts of money.
 
@@ -172,9 +165,7 @@ module AuditersHelper
   # Return a more descriptive version of a string. Pass the model the string
   # is for, the field it's for and its value (which may be from before or after
   # a recorded change, so it's not read from the model automatically using the
-  # field name you give). The field name must be given as a string not a symbol
-  # and must be the 'untranslated' form for translatable models (e.g. pass
-  # "title" rather than "title_en").
+  # field name you give). The field name must be given as a String.
   #
   # Returns a more descriptive string including special case handlers for known
   # fields which contain e.g. Textile data. The returned value is HTML safe.

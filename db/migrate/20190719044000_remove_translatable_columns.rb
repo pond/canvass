@@ -16,7 +16,7 @@
 #
 class RemoveTranslatableColumns < ActiveRecord::Migration[5.2]
   def change
-    rename_column :polls, :title_en, :title
-    rename_column :polls, :description_en, :description
+    rename_column :polls, :title_en,       :title       if Poll.has_attribute?(:title_en)
+    rename_column :polls, :description_en, :description if Poll.has_attribute?(:description_en)
   end
 end

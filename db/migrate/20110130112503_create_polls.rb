@@ -11,20 +11,8 @@ class CreatePolls < ActiveRecord::Migration[4.2]
   def self.up
     create_table :polls do |t|
 
-      # See "prepare_model_for_translation" in "translations_controller.rb" and
-      # the Poll model. The following is equivalent to:
-      #
-      #   t.string :title_<default-locale-code>, :limit => Poll::MAXLEN_TITLE
-      #   t.text   :body_<default-locale-code>
-
-      t.column Poll.current_locale_column( 'title' ).to_sym,
-               Poll.column_type( :title ),
-               Poll.column_options( :title )
-
-      t.column Poll.current_locale_column( 'description' ).to_sym,
-               Poll.column_type( :description ),
-               Poll.column_options( :description )
-
+      t.string  :title, :limit => Poll::MAXLEN_TITLE
+      t.text    :description
       t.integer :votes
 
       # Link back to the administrator who created this poll and the currency

@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.3'
-
 gem 'duktape'
 gem 'tzinfo-data'
 gem 'hubssolib', '~> 1.0', require: 'hub_sso_lib'
@@ -65,9 +63,17 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
-  gem 'selenium-webdriver'
-  # Easy installation and use of chromedriver to run system tests with Chrome
-  gem 'chromedriver-helper'
+
+  # Adds support for Capybara system testing and selenium driver, headless:
+  # https://rubygems.org/gems/capybara
+  # https://rubygems.org/gems/capybara-screenshot
+  #
+  gem 'capybara', '~> 3.26'
+  gem 'capybara-screenshot', '~> 1.0'
+
+  # Easy installation and use of chromedriver to run system tests with Chrome:
+  # https://rubygems.org/gems/webdrivers
+  #
+  gem 'webdrivers', '~> 4.1'
+
 end
