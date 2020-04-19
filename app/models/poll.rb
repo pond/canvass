@@ -9,6 +9,7 @@
 ########################################################################
 
 class Poll < ActiveRecord::Base
+  include WorkflowActiverecord
 
   audited :protect => false, :except => [ :total_for_sorting ]
 
@@ -261,8 +262,8 @@ class Poll < ActiveRecord::Base
   # transitioned given its current state.
   #
   def allowed_new_states
-    allowed_transitions = self.current_state.events.values.collect do | event |
-      event.transitions_to
-    end
+    allowed_transitions = self.current_state.events.values.collect do | event_array |
+      event_array.map(&:transitions_to)
+    end.flatten
   end
 end

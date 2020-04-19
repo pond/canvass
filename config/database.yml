@@ -1,11 +1,12 @@
-# TrackRecord PostgreSQL database configuration. Syntax taken from
+# Canvass PostgreSQL database configuration. Syntax taken from
 # "http://blog.bleything.net/" (Ben Bleything, June 2006).
 
 dbinfo: &dbinfo
   adapter: postgresql
   host: localhost
-  username: canvass
-  password: set-password-here
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.

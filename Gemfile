@@ -32,6 +32,7 @@ gem 'ransack', '~> 2.1'
 # Model state machines:
 # https://github.com/geekq/workflow
 gem 'workflow', '~> 2.0'
+gem 'workflow-activerecord', '>= 4.1'
 # Payment gateways:
 # https://github.com/activemerchant/active_merchant
 gem 'activemerchant', '~> 1.95', require: 'active_merchant'
@@ -41,13 +42,6 @@ gem 'RedCloth', '~> 4.3'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.5'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

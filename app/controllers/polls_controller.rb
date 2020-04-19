@@ -111,16 +111,18 @@ class PollsController < ApplicationController
       # processing depending upon the nature of the transition.
 
       result = Poll.transaction do
-        new_state = params[ :poll ][ :workflow_state ]
+        new_state = params[ :poll ].delete( :workflow_state )
 
         unless ( new_state.blank? )
           new_state = new_state.to_sym
-          params[ :poll ].delete( :workflow_state )
 
           if ( @poll.allowed_new_states.include?( new_state ) )
-            @poll.current_state.events.each do | event_name, event_action |
-              if ( event_action.transitions_to.to_sym == new_state )
-                @poll.send( "#{ event_name }!" )
+            @poll.current_state.events.each do | event_name, event_array |
+              event_array.each do | event |
+                if ( event.transitions_to.to_sym == new_state )
+                  @poll.send( "#{ event_name }!" )
+                  break
+                end
               end
             end
           end
@@ -140,7 +142,7 @@ class PollsController < ApplicationController
       # user can see what went wrong.
 
       @poll.reload
-      @poll.errors.add_to_base( error.message ) unless error.message.empty?
+      @poll.errors.add( :base, error.message ) unless error.message.empty?
 
       result = false
 

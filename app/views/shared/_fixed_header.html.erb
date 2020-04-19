@@ -1,4 +1,8 @@
 <div style="padding: 10px; margin-bottom: 20px; border: 1px solid red;">
-  <div style="float: right"><% unless @service_fault %><a href="<%= ENV["HUB_PATH_PREFIX"] %>/account/login_conditional"><img src="<%= ENV["HUB_PATH_PREFIX"] %>/account/login_indication" alt="Account" border="0" height="18" width="72" /></a><% end %></div>
+  <div style="float: right">
+    <% unless @service_fault %>
+      <a href="<%= ENV["HUB_PATH_PREFIX"] %>/account/login_conditional"><img src="<%= ENV["HUB_PATH_PREFIX"] %>/account/login_indication" alt="Account" border="0" height="18" width="72" /></a>
+    <% end %>
+  </div>
   (PLACEHOLDER HEADER)
 </div>
