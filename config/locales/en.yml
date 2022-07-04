@@ -252,6 +252,12 @@ en:
               view_card_cvv:                           "The CVV (Card Verification Value, sometimes called the card security code) is a three or four digit number usually printed on or close to the top right of the signature strip on the back of your card, or in some card types such as American Express, on the front and towards the right hand side, above the embossed main card number."
               view_card_cvv_image_attribution:         "Source: %{link}"
 
+            # PayPal payment processing.
+            #
+            payments:
+              action_notice_confirm_payment:           "Your donation was successful. Thanks for your support!"
+              error_from_paypal_api:                   "Payment for the donation could not be completed."
+
             # Incoming payment processing - common.
             #
             payment_gateway:

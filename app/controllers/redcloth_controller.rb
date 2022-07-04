@@ -9,6 +9,6 @@
 
 class RedclothController < ApplicationController
   def create
-    render :text => RedCloth.new( params[ :textile ] || '' ).to_html
+    render plain: RedCloth.new( params[ :textile ] || '' ).to_html
   end
 end

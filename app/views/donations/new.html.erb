@@ -1,5 +1,6 @@
 <%= form_for( [ :poll, @donation ] ) do | f | %>
   <%= render "shared/error_messages", :target => @donation %>
+  <%= f.hidden_field( :poll_id ) %>
 
   <p>
     <%= apphelp_view_hint( :preamble_hint, DonationsController, :poll_title => @poll.title ) %>
@@ -21,8 +22,8 @@
     <%= apphelp_view_hint( :payment_not_stored ) %>
   </p>
 
-  <p>
-<%   if current_user.admin? -%>
+  <p></p>
+<% if current_user.admin? -%>
     <table border="0" cellspacing="0" cellpadding="0" class="no_border abuted">
       <tr valign="top">
         <td>
@@ -47,29 +48,59 @@
         </td>
       </tr>
     </table>
-<%   end -%>
-<%   unless ( PaymentGateway.instance.gateway_is_express_only() ) -%>
-    <%= radio_button_tag( :payment_method, :onsite, params[ :payment_method ] == 'onsite' ) -%>
-    <%= label_tag( :payment_method_onsite, apphelp_view_hint( :payment_onsite_hint ) ) %>
-<%   end -%>
-<%   if ( PaymentGateway.instance.gateway_is_express_only() || PaymentGateway.instance.gateway_has_express_support() ) -%>
-<%     unless ( PaymentGateway.instance.gateway_is_express_only() ) -%>
-    <br />
-<%     end -%>
-    <%= radio_button_tag( :payment_method, :offsite, params[ :payment_method ] == 'offsite' || PaymentGateway.instance.gateway_is_express_only() ) -%>
-    <%=
-        acceptance_mark = image_tag(
-          "https://www.paypal.com/en_GB/GB/i/logo/PayPal_mark_37x23.gif",
-          :size => '37x23',
-          :alt  => "PayPal",
-          :align => :middle,
-          :style => "margin-bottom: 15px;"
-        )
+<% end -%>
 
-        label_tag( :payment_method_offsite, (apphelp_view_hint( :payment_offsite_hint ) + "&nbsp;" + acceptance_mark).html_safe() )
-    %>
-<%   end -%>
-  </p>
+  <div id="paypal-button-container"></div>
+    <script src="https://www.paypal.com/sdk/js?currency=GBP&client-id=<%= PAYPAL_CLIENT_ID %>"></script>
+    <script>
+      paypal.Buttons({
+        env: '<%= Rails.env.production? ? "live" : "sandbox" %>',
+        style: {
+          color: 'blue',
+          shape: 'pill'
+        },
+
+        createOrder: async () => {
+          const response = await fetch('/paypal/request', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              "poll_id":         document.getElementById('donation_poll_id'        ).value,
+              "amount_integer":  document.getElementById('donation_amount_integer' ).value,
+              "amount_fraction": document.getElementById('donation_amount_fraction').value
+            })
+          });
+
+          // Assume that for errors, flash was set by controller.
+          //
+          if (response.ok != true) {
+            window.location.href = '/';
+            return nil;
+          }
+          else {
+            const responseData = await response.json();
+            return responseData.token;
+          }
+        },
+
+        onApprove: async (data) => {
+          await fetch('/paypal/confirm', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({token: data.orderID})
+          });
+
+          // Assume for error or otherwise, flash was set by the controller.
+          //
+          window.location.href = '/';
+        }
+      }).render('#paypal-button-container');
+    </script>
+  </div>
 
   <div class="buttons aligned">
     <%= apphelp_submit( f, "Make donation" ) %>

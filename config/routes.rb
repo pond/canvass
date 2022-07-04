@@ -18,16 +18,20 @@ Rails.application.routes.draw do
   # Privileged users browse donations without limiting the scope by user ID.
   # Polls can be similarly viewed without restriction.
   #
-  # Polls have many donations. Resource-ful URLs are used when creating a
-  # donation to associate with the poll to which the donation is being made.
-  # The payment gateway process proceeds in the context of the current logged
-  # in user, with the poll identified by the context inferred by the URL.
+  # Polls have many donations.
   #
   resources :donations, :only => [ :index, :show ]
   resources :polls do | poll |
     resources :donations, :only => [ :index, :show, :new, :create ]
-    resource  :payment_gateway_onsite,  :controller => :payment_gateway_onsite,  :member => { :delete => :get }
-    resource  :payment_gateway_offsite, :controller => :payment_gateway_offsite, :member => { :delete => :get }
+  end
+
+  # The PayPal engine is bespoke and based on:
+  # https://www.davidangulo.xyz/simple-paypal-checkout-in-ruby-on-rails-using-orders-api-v2/
+  #
+  #
+  namespace 'paypal' do
+    post :request, :to => 'payments#request_payment'
+    post :confirm, :to => 'payments#confirm_payment'
   end
 
   # Full currency support, for number formatting, editing etc. (CRUD interface

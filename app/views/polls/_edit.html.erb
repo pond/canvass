@@ -73,18 +73,11 @@
   <%= f.text_area :description, :rows => 20, :cols => 80, :class => 'redcloth_preview_source' %>
 
   <script type="text/javascript">
-    document.observe
+    RedClothPreview.initialize
     (
-      "dom:loaded",
-      function()
-      {
-        new RedClothPreview
-        (
-          'poll_description',
-          'description_preview',
-          '<%= redcloth_path() %>'
-        );
-      }
+      'poll_description',
+      'description_preview',
+      '<%= redcloth_path() %>'
     );
   </script>
 

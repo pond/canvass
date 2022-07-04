@@ -3,15 +3,15 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'duktape'
 gem 'tzinfo-data'
-gem 'hubssolib', '~> 1.0', require: 'hub_sso_lib'
+gem 'hubssolib', '~> 2.1', require: 'hub_sso_lib'
 gem 'rails-observers'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0'
 # Use sqlite3 as the database for Active Record
-gem 'pg', '= 0.18.4' # TODO: Version lock is a ROOL / RISC OS Open customisation
+gem 'pg', '~> 1.4.1'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 6.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use Thin for web server in development
@@ -33,9 +33,12 @@ gem 'ransack', '~> 2.1'
 # https://github.com/geekq/workflow
 gem 'workflow', '~> 2.0'
 gem 'workflow-activerecord', '>= 4.1'
-# Payment gateways:
-# https://github.com/activemerchant/active_merchant
-gem 'activemerchant', '~> 1.95', require: 'active_merchant'
+# Money gem, mostly for string formatting:
+#https://rubygems.org/gems/money
+gem 'money', '~> 6.16'
+# PayPal support:
+# https://rubygems.org/gems/paypal-checkout-sdk
+gem 'paypal-checkout-sdk', '~> 1.0'
 # Textile (Canvass predates the wider popularity of Markdown):
 # http://github.com/jgarber/redcloth
 gem 'RedCloth', '~> 4.3'

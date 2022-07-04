@@ -258,35 +258,30 @@ class Donation < Collectable
 
     self.safely_destroy_initial_state_donations_for( donor ) unless options[ :external ] == true
 
-    return Donation.transaction do
+    # In English as this is a debug-only exception.
 
-      # In English as this is a debug-only exception.
+    raise( "Associated poll cannot receive donations" ) if ( poll.workflow_state.to_sym != Poll::STATE_OPEN )
 
-      raise( "Associated poll cannot receive donations" ) if ( poll.workflow_state.to_sym != Poll::STATE_OPEN )
+    # Create the new donation object.
 
-      # Create the new donation object.
+    options[ :name  ] = donor.name  unless options.has_key?( :name  )
+    options[ :email ] = donor.email unless options.has_key?( :email )
 
-      options[ :name  ] = donor.name  unless options.has_key?( :name  )
-      options[ :email ] = donor.email unless options.has_key?( :email )
+    return Donation.new(
+      :user            => donor,
+      :user_name       => options[ :name  ] || "",
+      :user_email      => options[ :email ] || "",
 
-      donation = Donation.new(
-        :user            => donor,
-        :user_name       => options[ :name  ] || "",
-        :user_email      => options[ :email ] || "",
+      :poll            => poll,
+      :poll_title      => poll.title,
 
-        :poll            => poll,
-        :poll_title      => poll.title,
+      :currency        => poll.currency,
 
-        :currency        => poll.currency,
+      :amount_integer  => donation_integer,
+      :amount_fraction => donation_fraction,
 
-        :amount_integer  => donation_integer,
-        :amount_fraction => donation_fraction,
-
-        :workflow_state  => Donation::STATE_INITIAL
-      )
-
-      donation # Transaction block return value
-    end        # "return Donation.transaction do"
+      :workflow_state  => Donation::STATE_INITIAL
+    )
   end
 
   # Send a notification e-mail message to the seller confirming their

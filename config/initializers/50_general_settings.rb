@@ -27,3 +27,12 @@ MAXIMUM_LIST_ITEMS_PER_PAGE = 25
 
 MATCHING_POT_CURRENCY = 'GBP'
 MATCHING_POT_LOCATION = "/home/rool/shared/matching_pot.txt"
+
+# PayPal configuration.
+
+PAYPAL_CLIENT_ID     = ENV['PAYPAL_CLIENT_ID'    ]
+PAYPAL_CLIENT_SECRET = ENV['PAYPAL_CLIENT_SECRET']
+
+unless PAYPAL_CLIENT_ID.present? && PAYPAL_CLIENT_SECRET.present?
+  raise 'You must define environment variables PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET'
+end

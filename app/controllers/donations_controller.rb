@@ -51,6 +51,7 @@ class DonationsController < ApplicationController
   def new
     @poll     = Poll.find_by_id( params[ :poll_id ] )
     @donation = Donation.generate_for( @poll, current_user, '0', '0' )
+
     params[ :payment_method ] = current_user.admin? ? 'none' : 'onsite'
   end
 
@@ -58,22 +59,25 @@ class DonationsController < ApplicationController
   def create
     payment_method = params[ :payment_method ]
 
-    redirect_to root_path() and return if (
-      %w{ none onsite offsite }.include?( payment_method ) == false ||
-      ( payment_method == 'none' && current_user.admin? == false )
-    )
+    # This used to be used for donation creation with payment gateways
+    # involved, but is now only used for the admin "register an external
+    # donation" functionality.
+    #
+    # Everything else is done via bespoke PayPal code.
+    #
+    if payment_method != 'none' || current_user.admin? == false
+      redirect_to root_path() and return
+    end
 
     # Here, we know that the payment method parameter is valid and the
     # current user has permission to use whatever method was specified.
-
+    #
     begin
-      options = {}
-
-      if ( payment_method == 'none' )
-        options[ :external ] = true
-        options[ :name     ] = params[ :payment_none_donor_name  ]
-        options[ :email    ] = params[ :payment_none_donor_email ]
-      end
+      options = {
+        :external => true,
+        :name     => params[ :payment_none_donor_name  ],
+        :email    => params[ :payment_none_donor_email ]
+      }
 
       @poll     = Poll.find_by_id( params[ :poll_id ] )
       @donation = Donation.generate_for(
@@ -95,7 +99,7 @@ class DonationsController < ApplicationController
     Donation.transaction do
       saved = @donation.save
 
-      if ( saved && payment_method == 'none' )
+      if ( saved )
         @donation.notes          = t( :'uk.org.pond.canvass.controllers.donations.view_external_note' )
         @donation.invoice_number = InvoiceNumber.next!
         @donation.paid! # See Workflow state machine definitions in donation.rb
