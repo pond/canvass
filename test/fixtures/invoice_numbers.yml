@@ -1,7 +1,0 @@
-# This file is used both to populate the test database and to populate any
-# other database when migrations are run, so that the real site and the test
-# site both run from the same initial data set.
-
-singleton:
-  id: 1
-  last_number_used: 0

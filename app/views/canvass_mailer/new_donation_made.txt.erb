@@ -1,9 +1,0 @@
-<%=
-  CanvassMailer.formatted(
-    :new_donation_made_body,
-    :poll_title => @data.poll_title,
-    :site_name  => apphelp_site_name()
-  )
-%>
-
-  <%= user_donation_url( :user_id => @data.user_id, :id => @data.id ) %>
